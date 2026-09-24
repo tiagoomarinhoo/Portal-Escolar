@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "F:/Aula WEB/Programas"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Programas"
+	}
+}

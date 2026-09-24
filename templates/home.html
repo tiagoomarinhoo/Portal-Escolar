@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% import "macro.html" as macros %}
+    <link rel="stylesheet" href="/static/css/estilo.css">
+    <style>
+       
+     
+    </style>
+
+</head>
+
+<body class="flex min-h-screen bg-white text-gray-800">
+
+    {{ macros.build_site_navigation(pages=pages, selected="Home") }}
+    <!-- CONTEÚDO PRINCIPAL DA PÁGINA (Lado Direito) -->
+    <main class="main-container">
+        <h1 class="header">Olá, Direção!</h1>
+        <section class="grid-dashboard">
+            <div class="card-dashboard">
+                <h4>Notícias</h4>
+                <p>12</p>
+            </div>
+            <div class="card-dashboard">
+                <h4>Eventos</h4>
+                <p>5</p>
+            </div>
+            <div class="card-dashboard">
+                <h4>Alunos/participantes</h4>
+                <p>8</p>
+            </div>
+            <div class="card-dashboard">
+                <h4>Publicações</h4>
+                <p>42</p>
+            </div>
+        </section>
+
+        <section class="grid-aviso">
+            <h4>■ Aviso urgente</h4>
+            <p>Reunião pedagógica amanhã às 14h.</p>
+        </section>
+        <section class="grid-days">
+            <div class="card-days">
+                <h4>Próximos eventos</h4>
+                <p>Reunião de Pais 15/05 • 19:00 </p>
+                <p>Feira de Ciências 22/05 • 09:00</p>
+            </div>
+            <div class="card-days">
+                <h4>Cardápio do dia</h4>
+                <p>Almoço Arroz</p>
+                <p>Feijão</p>
+                <p>Frango</p>
+                <p>Salada</p>
+                <p>Fruta Alérgenos: lactose</p>
+               
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

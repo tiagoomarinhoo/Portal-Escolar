@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Css/normalize.css">
+    <style>
+        .container {
+            margin: 80px auto;
+            border: 1px solid #69788c;
+            border-radius: 15px;
+            width: 30%;
+            /* height: 50%; */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+
+        }
+        label{
+            display: block;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            background-color: #ebebeb;
+            padding: 15px;
+            border-radius: 5px;
+            border: transparent 3px solid;
+           
+            margin-bottom: 10px;
+        }
+
+        form{
+            margin: auto;
+        }
+
+        .container>* {}
+
+        .button-ts {
+            background-color: #49Bf9d;
+            color: white;
+            border: 2px solid #49Bf9d;
+            padding: .75em 2em;
+            border-radius: 5px;
+            font-size: .8em;
+            display: inline-block;
+            width: 100%;
+            transition: all .5s;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Portal escolar</h1>
+        <h2>integrado</h2>
+        <p>Acesse sua conta</p>
+
+        <form action="get">
+            <label for="user">E-mail ou usuário</label>
+            <input type="text" placeholder="responsavel@escola.local">
+            <label for="senha">Senha</label>
+            <input type="password">
+            <input type="button" class="button-ts" value="entrar">
+        </form>
+
+        <p>Acesso conforme perfil cadastrado.</p>
+        <a href="#">Esqueci minha senha</a>
+
+    </div>
+</body>
+
+</html>

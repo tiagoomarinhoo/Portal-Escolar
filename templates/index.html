@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Escolar</title>
+    <link href='http://fonts.googleapis.com/css?family=Oxygen:400,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="Css/style.css">
+    <link rel="stylesheet" href="Css/normalize.css">
+
+    <style>
+        html {
+            font-family: sans-serif;
+        }
+         h1,h3{
+            color: #17324d;
+         }
+
+         h2 , p{
+            color: #69788c;
+         }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 200px 1fr;
+            grid-gap: 20px;
+            /* margin-top: 500px; */
+            padding: 0 50px 0 50px;
+           
+
+        }
+
+        .home-header {
+            
+            grid-column: 1 / 4;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+           
+            
+        }
+        .item-header1{
+           
+           justify-self: start;
+            align-self: center;
+        }
+        .item-header1 h2{
+
+            padding: 0;
+            margin: 0;
+            font-size: 15px;
+
+
+        }
+        .item-header2{
+            justify-self: end;
+            align-self: center;
+        }
+        
+        .home-header::nth-child(2){
+
+            
+            align-self: end;
+        }
+      
+
+        .button{
+            padding: 20px;
+            background-color: rgb(50, 93, 231);
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 12px;
+
+            letter-spacing: 1px;
+            border-radius: 15px;
+        }
+
+        .grid-cards {
+            
+            grid-column: 1 / 4;
+            display: grid;
+            grid-gap: .5rem;
+            grid-template-columns: repeat(3, 33%);
+            height: 250px;
+            font-weight: bold;
+
+        }
+
+        .cards{
+            
+            padding-left: 25px;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            border: 1px solid #ccc;
+        }
+
+        .cards:nth-child(1){
+            border-top: 8px solid blue;
+        }
+        .cards:nth-child(2){
+            border-top: 8px solid green;
+        }
+        .cards:nth-child(3){
+            border-top: 8px solid orange;
+        }
+
+       
+
+        .grid-infor {
+
+            
+            grid-column: 1/ 4;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(3, 1fr);
+            grid-gap: 10px;
+        }
+        .news{
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding-left: 25px ;
+            text-align: inherit;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div class="grid-container">
+
+        <header class="home-header">
+
+            <div class="item-header1">
+                <h1>Portal Escolar Integrado</h1>
+                <h2>Comunicação escolar em um único lugar.</h2>
+            </div>
+
+            <div class="item-header2">
+                <a href="#" class="button">Acessar Portal</a>
+            </div>
+
+        </header>
+
+        <section class="grid-cards">
+
+            <article class="cards">
+                <h3> Últimas notícias</h3>
+                <p>Rematrículas abertas</p>
+            </article>
+
+            <article class="cards">
+                <h3> Cardápio do dia</h3>
+                <p>Arroz, feijão e frango</p>
+            </article>
+
+            <article class="cards">
+                <h3> Próximos eventos</h3>
+                <p> Reunião de Pais</p>
+            </article>
+
+        </section>
+
+        <section class="grid-infor">
+
+            <!-- <h2> Notícias em destaque</h2> -->
+
+            <article class="news">
+                <h3> Título da notícia</h3>
+                <p> Resumo da publicação escolar...</p>
+            </article>
+
+            <article class="news">
+                <h3> Título da notícia</h3>
+                <p> Resumo da publicação escolar...</p>
+            </article>
+
+            <article class="news">
+                <h3> Título da notícia</h3>
+                <p> Resumo da publicação escolar...</p>
+            </article>
+        </section>
+    </div>
+
+
+
+
+
+
+
+</body>
+
+</html>
