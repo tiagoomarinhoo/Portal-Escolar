@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% import "macro.html" as macros %}
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <!-- <link rel="stylesheet" href="/static/css/estilo.css"> -->
+
+</head>
+
+<body class="flex min-h-screen bg-white text-gray-800">
+    {{ macros.build_site_navigation(pages=pages, selected="Notícias") }}
+
+    <main>
+        <header>
+            <h1>Notícias</h1>
+            <a href="#">Nova noticia</a>
+        </header>
+
+        <section>
+            <button>Todas</button>
+            <button>Geral</button>
+            <button>Aviso</button>
+            <button>urgente</button>
+            <button>Conquista</button>
+        </section>
+
+        <section>
+            <label for="">Buscar noticia...</label>
+            <textarea name="" id=""></textarea>
+        </section>
+
+        <section>
+            <div>
+                <h4>Título da notícia</h4>
+                <p>Aviso urgente • 10/05/2026</p>
+                <a href="#">editar</a>
+                <a href="#">excluir</a>
+            </div>
+            <div>
+                <h4>Título da notícia</h4>
+                <p>Geral • 10/05/2026</p>
+                <a href="#">editar</a>
+                <a href="#">excluir</a>
+            </div>
+            <div>
+                <h4>Título da notícia</h4>
+                <p>Geral • 10/05/2026</p>
+                <a href="#">editar</a>
+                <a href="#">excluir</a>
+            </div>
+            <div>
+                <h4>Título da notícia</h4>
+                <p>Geral • 10/05/2026</p>
+                <a href="#">editar</a>
+                <a href="#">excluir</a>
+            </div>
+
+
+        </section>
+
+    </main>
+</body>
+
+</html>

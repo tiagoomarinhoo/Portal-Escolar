@@ -84,7 +84,9 @@ def home():
 
 @app.route('/noticias', methods=['GET'])
 def noticias():
-    return "<h1>Notícias</h1>"
+    minhas_paginas = generate_page_list()
+    return render_template('noticias.html', pages=minhas_paginas)
+    
 
 @app.route('/cardapio', methods=['GET'])
 def cardapio():
@@ -107,8 +109,8 @@ def sair():
     return "<h1>Sair (sair)</h1>"
 
 if __name__ == '__main__':
-    server = Server(app.wsgi_app)
-    server.serve(port=5000, debug=True)
+    
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
 
 
