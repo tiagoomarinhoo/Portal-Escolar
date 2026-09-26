@@ -1,2 +1,2 @@
 Ativar o servidor virtual
-.venv/bin/activate
+source .venv/bin/activate

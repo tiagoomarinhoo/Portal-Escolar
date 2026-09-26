@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Escolar</title>
     <link href='http://fonts.googleapis.com/css?family=Oxygen:400,300,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="Css/style.css">
-    <link rel="stylesheet" href="Css/normalize.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/normalize.css">
 
     <style>
         html {
@@ -138,7 +138,7 @@
             </div>
 
             <div class="item-header2">
-                <a href="#" class="button">Acessar Portal</a>
+                <a href="{{ url_for('login') }}" class="button">Acessar Portal</a>
             </div>
 
         </header>

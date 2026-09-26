@@ -63,12 +63,12 @@
         <h2>integrado</h2>
         <p>Acesse sua conta</p>
 
-        <form action="get">
+        <form  action="{{ url_for('processar_login') }}" method="post">
             <label for="user">E-mail ou usuário</label>
-            <input type="text" placeholder="responsavel@escola.local">
+            <input type="text" name="user">
             <label for="senha">Senha</label>
-            <input type="password">
-            <input type="button" class="button-ts" value="entrar">
+            <input type="password" name="senha">
+            <button class="button-ts" type="submit">Entrar</button>
         </form>
 
         <p>Acesso conforme perfil cadastrado.</p>

@@ -1,13 +1,11 @@
-from flask import Flask, render_template, request,url_for
+from flask import Flask, render_template, request,url_for,redirect
 import requests
 from livereload import Server  # Importe o Server
 
 
 app = Flask(__name__)
 
-# @app.route("/", methods=['GET'])
-# def index():
-#     return "<h1> Olá Programação com Flask</h1>"
+
 # @app.route("/contatos", methods=['GET'])
 # def contatos():
 #     return "<h1> Página Contatos </h1>"
@@ -61,9 +59,26 @@ app = Flask(__name__)
 
 #     return render_template("produtos.html", dados=dados)
 
+@app.route("/", methods=['GET'])
+def index():
+    return render_template("index.html")
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route("/processar_login", methods=['POST'])
+def processar_login():
+    user = request.form.get('user')
+    senha = request.form.get('senha')
+
+    if user == "admin" and senha == "admin":
+        return redirect(url_for('home'))
+    else:
+        return redirect(url_for('login'))
+    
 
 
-# 1. Função do menu sem a necessidade do site_id
 def generate_page_list():
     pages = [
         {"name": "Home", "url": url_for("home")},
