@@ -5,64 +5,226 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     {% import "macro.html" as macros %}
     <link rel="stylesheet" href="/static/css/normalize.css">
     <!-- <link rel="stylesheet" href="/static/css/estilo.css"> -->
+
+    <style>
+        .main-container {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 20px;
+                flex: 1;
+                min-width: 0;
+                margin: 0;
+                padding: 40px 30px 24px 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            
+        }
+        .header h1{
+            font-size: 24px;
+            font-weight: bold;
+            color: #17324d;
+        }
+
+        .header a{
+            background-color: #2563eb;
+            color: white;
+            padding: 8px 30px;
+            border-radius: 15px;
+            text-decoration: none;
+            margin-right: 25px;
+            text-transform: uppercase;
+        }
+        .pesquisa-section{
+            color: #69788c;
+
+        }
+
+        .pesquisa-section label{
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .pesquisa-section textarea{
+            width: 100%;
+            height: 60px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+        }
+        
+        .noticias-section{
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 20px;
+        }
+
+           .cards-noticia{
+            
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding-left: 10px;
+            
+           }
+
+           .card-cabecalho{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            padding-left: 30px;
+           }
+
+           .card-acoes{
+            display: flex;
+            gap: 12px;
+           }
+
+           .card-acoes a{
+            color: #475569;
+            padding: 4px;
+           }
+
+           .card-acoes a:hover{
+            color: #2563eb;
+           }
+
+           .card-acoes .acao-excluir:hover{
+            color: #dc2626;
+           }
+
+           .paginacao{
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+           }
+
+           .paginacao ul{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+           }
+
+           .paginacao a{
+            display: grid;
+            place-items: center;
+            min-width: 40px;
+            height: 40px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            color: #334155;
+            text-decoration: none;
+           }
+
+           .paginacao a[aria-current="page"]{
+            border-color: #2563eb;
+            background-color: #2563eb;
+            color: white;
+           }
+    </style>
 
 </head>
 
 <body class="flex min-h-screen bg-white text-gray-800">
     {{ macros.build_site_navigation(pages=pages, selected="Notícias") }}
 
-    <main>
-        <header>
+    <main class="main-container">
+        <header class="header">
             <h1>Notícias</h1>
-            <a href="#">Nova noticia</a>
+            <a href="/noticias/nova" >Nova notícia</a>
         </header>
 
-        <section>
-            <button>Todas</button>
-            <button>Geral</button>
-            <button>Aviso</button>
-            <button>urgente</button>
-            <button>Conquista</button>
+        <section class="filtro-section">
+            <button class="bg-blue-500 text-white px-8 py-2 rounded">Todas</button>
+            <button class="bg-blue-500 text-white px-8 py-2 rounded">Geral</button>
+            <button class="bg-blue-500 text-white px-8 py-2 rounded">Aviso</button>
+            <button class="bg-blue-500 text-white px-8 py-2 rounded">urgente</button>
+            <button class="bg-blue-500 text-white px-8 py-2 rounded">Conquista</button>
         </section>
 
-        <section>
+        <section class="pesquisa-section">
             <label for="">Buscar noticia...</label>
-            <textarea name="" id=""></textarea>
+            <textarea class="w-full h-24 border border-gray-400 p-2"name="" id=""></textarea>
         </section>
 
-        <section>
-            <div>
-                <h4>Título da notícia</h4>
-                <p>Aviso urgente • 10/05/2026</p>
-                <a href="#">editar</a>
-                <a href="#">excluir</a>
+        <section class="noticias-section">
+            <div class="cards-noticia">
+                <div class="card-cabecalho">
+                    <div>
+                        <h4>Título da notícia</h4>
+                        <p>Aviso urgente • 10/05/2026</p>
+                    </div>
+                    <nav class="card-acoes" aria-label="Ações da notícia">
+                        <a href="#" aria-label="Editar notícia" title="Editar notícia"><i data-lucide="pencil"></i></a>
+                        <a class="acao-excluir" href="#" aria-label="Excluir notícia" title="Excluir notícia"><i data-lucide="trash-2"></i></a>
+                    </nav>
+                </div>
             </div>
-            <div>
-                <h4>Título da notícia</h4>
-                <p>Geral • 10/05/2026</p>
-                <a href="#">editar</a>
-                <a href="#">excluir</a>
+            <div class="cards-noticia">
+                <div class="card-cabecalho">
+                    <div>
+                        <h4>Título da notícia</h4>
+                        <p>Geral • 10/05/2026</p>
+                    </div>
+                    <nav class="card-acoes" aria-label="Ações da notícia">
+                        <a href="#" aria-label="Editar notícia" title="Editar notícia"><i data-lucide="pencil"></i></a>
+                        <a class="acao-excluir" href="#" aria-label="Excluir notícia" title="Excluir notícia"><i data-lucide="trash-2"></i></a>
+                    </nav>
+                </div>
             </div>
-            <div>
-                <h4>Título da notícia</h4>
-                <p>Geral • 10/05/2026</p>
-                <a href="#">editar</a>
-                <a href="#">excluir</a>
+            <div class="cards-noticia">
+                <div class="card-cabecalho">
+                    <div>
+                        <h4>Título da notícia</h4>
+                        <p>Geral • 10/05/2026</p>
+                    </div>
+                    <nav class="card-acoes" aria-label="Ações da notícia">
+                        <a href="#" aria-label="Editar notícia" title="Editar notícia"><i data-lucide="pencil"></i></a>
+                        <a class="acao-excluir" href="#" aria-label="Excluir notícia" title="Excluir notícia"><i data-lucide="trash-2"></i></a>
+                    </nav>
+                </div>
             </div>
-            <div>
-                <h4>Título da notícia</h4>
-                <p>Geral • 10/05/2026</p>
-                <a href="#">editar</a>
-                <a href="#">excluir</a>
+            <div class="cards-noticia">
+                <div class="card-cabecalho">
+                    <div>
+                        <h4>Título da notícia</h4>
+                        <p>Geral • 10/05/2026</p>
+                    </div>
+                    <nav class="card-acoes" aria-label="Ações da notícia">
+                        <a href="#" aria-label="Editar notícia" title="Editar notícia"><i data-lucide="pencil"></i></a>
+                        <a class="acao-excluir" href="#" aria-label="Excluir notícia" title="Excluir notícia"><i data-lucide="trash-2"></i></a>
+                    </nav>
+                </div>
             </div>
-
+            <nav class="paginacao" aria-label="Paginação das notícias">
+                <ul>
+                    <li><a href="" aria-current="page">1</a></li>
+                    <li><a href="">2</a></li>
+                    <li><a href="">3</a></li>
+                    <li><a href="">4</a></li>
+                </ul>
+            </nav>
 
         </section>
 
     </main>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>

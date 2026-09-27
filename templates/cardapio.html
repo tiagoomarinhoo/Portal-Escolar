@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    {% import "macro.html" as macros %}
+    <link rel="stylesheet" href="/static/css/normalize.css">
+
+    <style>
+        .main-container {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 20px;
+            flex: 1;
+            min-width: 0;
+            margin: 0;
+            padding: 40px 30px 24px 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #17324d;
+        }
+
+        .header a {
+            background-color: #2563eb;
+            color: white;
+            padding: 8px 30px;
+            border-radius: 15px;
+            text-decoration: none;
+            margin-right: 25px;
+            text-transform: uppercase;
+        }
+
+        .filtro-button {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+
+        .filtro-button button {
+            background-color: #2563eb;
+            color: white;
+            padding: 8px 30px;
+            border-radius: 15px;
+            text-decoration: none;
+            margin-right: 25px;
+            text-transform: uppercase;
+        }
+
+        .filtro-dia {
+            display: flex;
+            /* flex-direction: column; */
+            gap: 15px;
+
+            border: 1px solid #17324d;
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .filtro-almoco,
+        .filtro-jantar {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 10px;
+            border: 1px solid #17324d;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .cards {
+            padding: 10px;
+            /* display: flex; */
+        }
+
+        .receicao-identificacao {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icone-refeicao {
+            display: grid;
+            place-items: center;
+            flex: 0 0 48px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .icone-refeicao svg {
+            width: 20px;
+            height: 20px;
+
+        }
+
+
+
+
+
+        .cards:nth-child(1) {
+            border-right: 1px solid #17324d;
+
+        }
+
+        .cards:nth-child(2) {
+            border-right: 1px solid #17324d;
+        }
+
+        .cards h2,
+        .cards h3 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #17324d;
+        }
+
+        .cards li {
+            font-size: 16px;
+            color: #17324d;
+            margin: 5px 0;
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        .cards p {
+            font-size: 16px;
+            color: #17324d;
+            margin: 5px 0;
+        }
+
+        .cards ul {
+            padding-left: 20px;
+        }
+
+        .alergeno {
+            display: flex;
+            gap: 12px;
+            /* color: #b45309; */
+        }
+
+        .alergenos-lista {
+            
+            display: flex;
+            margin-top: 10px;
+
+           
+            
+            
+            
+
+        }
+        .alergenos-lista li{
+            color: #fc5d21;
+            font-weight: bold;
+            padding: 10px;           
+            border-radius: 15px;
+          
+            background-color: #fee8e0;
+            list-style-type: none;
+            
+        }
+
+        .alergeno h3 {
+            color: #b45309;
+        }
+
+        .icone-alergeno {
+            display: grid;
+            place-items: center;
+            flex: 0 0 32px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .icone-alergeno svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .informacoes {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 14px;
+            color: #69788c;
+            margin-top: 20px;
+            border: 1px solid #17324d;
+            padding: 15px;
+            border-radius: 15px;
+
+        }
+    </style>
+</head>
+
+<body class="flex min-h-screen bg-white text-gray-800">
+    {{ macros.build_site_navigation(pages=pages, selected="Cardápio") }}
+
+    <main class="main-container">
+
+        <header class="header">
+            <div>
+                <h1>Cardápio</h1>
+                <p>Consulte o cardápio do dia e veja os alimentos e alérgenos.</p>
+            </div>
+            <div class="header-actions">
+                <input type="date" value="2026-05-10">
+                <a href="/cardapio/nova">Novo Cardápio</a>
+            </div>
+        </header>
+
+        <section class="filtro-button">
+
+            <button>Por dia</button>
+            <button>Por semana</button>
+        </section>
+
+        <section class="filtro-dia">
+            <span class="icone-refeicao" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                </svg>
+
+
+            </span>
+            <div>
+                <h2>Segunda-feira</h2>
+                <p>10 de maio de 2026</p>
+            </div>
+        </section>
+
+
+        <section class="filtro-almoco">
+
+            <div class="cards receicao-identificacao">
+                <span class="icone-refeicao" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                    </svg>
+
+                </span>
+                <div>
+                    <h2>Almoço</h2>
+                    <p>12:00</p>
+                </div>
+            </div>
+            <div class="cards">
+                <h3>Cardápio</h3>
+                <ul>
+                    <li>Arroz branco</li>
+                    <li>Feijão carioca</li>
+                    <li>Frango grelhado</li>
+                    <li>Salada de alface e tomate</li>
+                    
+                </ul>
+
+                <p><strong style="color: #2d9b65;">Sobremesa:</strong> Laranja</p>
+            </div>
+            <div class="cards">
+                <div class="alergeno">
+                    <span class="icone-alergeno">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                        </svg>
+
+                    </span>
+                    <h3>Alérgenos presentes</h3>
+                </div>
+                <ul class="alergenos-lista">
+                    <li>Glúten</li>
+                    <li>Leite/Lactose</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="filtro-jantar">
+            <div class="cards receicao-identificacao">
+                <span class="icone-refeicao" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+                </span>
+                <div>
+                    <h2>Jantar</h2>
+                    <p>19:00</p>
+                </div>
+            </div>
+            <div class="cards">
+                <h3>Cardápio</h3>
+                <ul>
+                    <li>Sopa de legumes</li>
+                    <li>Pão integral</li>
+                </ul>
+            </div>
+            <div class="cards">
+                <div class="alergeno">
+                    <span class="icone-alergeno">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                        </svg>
+
+                    </span>
+                    <h3>Alérgenos presentes</h3>
+                </div>
+                <ul class="alergenos-lista">
+                    <li>Glúten</li>
+                    
+                </ul>
+            </div>
+        </section>
+
+        <article class="informacoes">
+
+            <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-10 h-10">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                </svg>
+            </span>
+            <p>As informações de alérgenos são importantes para a segurança alimentar dos alunos.
+                Em caso de dúvidas, procure a equipe de nutrição da escola.</p>
+        </article>
+
+    </main>
+
+</body>
+
+</html>

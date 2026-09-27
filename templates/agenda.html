@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% import "macro.html" as macros %}
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <style>
+        .main-container {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-rows: auto 1fr;
+            grid-gap: 20px;
+            flex: 1;
+            min-width: 0;
+            margin: 0;
+            padding: 20px 30px 24px 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+       
+        .header a {
+            background-color: #2563eb;
+            color: white;
+            padding: 8px 30px;
+            border-radius: 15px;
+            text-decoration: none;
+            margin-right: 25px;
+            text-transform: uppercase;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #17324d;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            /* border: 1px solid #ccc; */
+
+        }
+        .grid-date {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .grid-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            /* gap: 5px; */
+            text-align: center;
+            /* width: 100%; */
+            grid-gap: 5px;
+            text-align: center;
+
+        }
+
+        .grid-date h2 {
+
+            font-size: 20px;
+            font-weight: bold;
+            color: #17324d;
+        }
+
+        .grid-eventos {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding: 10px;
+            text-align: center;
+        }
+        .grid-eventos h2 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #17324d;
+        }
+    </style>
+</head>
+
+<body class="flex min-h-screen bg-white text-gray-800">
+    {{ macros.build_site_navigation(pages=pages, selected="Eventos") }}
+    <main class="main-container">
+        <header class="header">
+            <h1>Agenda</h1>
+             <div class="header-actions">
+               
+                <a href="/eventos/novo">Novo Evento</a>
+            </div>
+        </header>
+        <section class="grid-container">
+            <section class="grid-date">
+                <h2>Maio 2026</h2>
+                <div class="grid-calendar">
+                    Dom Seg Ter Qua Qui Sex Sáb
+                    1 2 3 4 5 6 7
+                    8 9 10 11 12 13 14
+                    15 16 17 18 19 20 21
+                    22 23 24 25 26 27 28
+                    29 30 31
+                </div>
+            </section>
+            <section class="grid-eventos">
+
+                <h2>Próximos eventos</h2>
+
+                <div>
+                    <h3>Reunião de Pais</h3>
+                    <p>15/05 • 19:00</p>
+                </div>
+                <div>
+                    <h3>Feira de Ciências</h3>
+                    <p>22/05 • 09:00</p>
+                </div>
+                <div>
+                    <h3>Feriado</h3>
+                    <p>30/05 • Dia todo</p>
+                </div>
+            </section>
+        </section>
+    </main>
+</body>
+
+</html>

@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request,url_for,redirect
 import requests
-from livereload import Server  # Importe o Server
 
 
 app = Flask(__name__)
@@ -59,14 +58,16 @@ app = Flask(__name__)
 
 #     return render_template("produtos.html", dados=dados)
 
+
+# Pagina inicial do sistema
 @app.route("/", methods=['GET'])
 def index():
     return render_template("index.html")
-
+# pagina de login do sistema
 @app.route('/login')
 def login():
     return render_template('login.html')
-
+# processamento do login do sistema
 @app.route("/processar_login", methods=['POST'])
 def processar_login():
     user = request.form.get('user')
@@ -78,11 +79,12 @@ def processar_login():
         return redirect(url_for('login'))
     
 
-
+# Gerar a lista de páginas para o menu
 def generate_page_list():
     pages = [
         {"name": "Home", "url": url_for("home")},
         {"name": "Notícias", "url": url_for("noticias")},
+        # {"name": "Noticias", "url": url_for("nova_noticia")},
         {"name": "Cardápio", "url": url_for("cardapio")},
         {"name": "Eventos", "url": url_for("eventos")},
         {"name": "Confirmações", "url": url_for("confirmacao")},
@@ -91,25 +93,52 @@ def generate_page_list():
     ]
     return pages
 
-# 2. Rota limpa apontando para /home
+# Rotas para as páginas do sistema
 @app.route('/home', methods=['GET'])
 def home():
     minhas_paginas = generate_page_list()
     return render_template('home.html', pages=minhas_paginas)
 
+# rota para a página de notícias, que exibe a lista de páginas no menu
+
 @app.route('/noticias', methods=['GET'])
 def noticias():
     minhas_paginas = generate_page_list()
     return render_template('noticias.html', pages=minhas_paginas)
-    
+
+@app.route('/noticias/nova', methods=['POST', 'GET'])
+def nova_noticia():
+    minhas_paginas = generate_page_list()
+    mensagem = None
+    if request.method == 'POST':
+        mensagem = 'Formulário recebido, mas as notícias ainda não são salvas.' 
+    return render_template('cad_noticia.html', pages=minhas_paginas, mensagem=mensagem)
 
 @app.route('/cardapio', methods=['GET'])
 def cardapio():
-    return "<h1>Cardápio</h1>"
+        minhas_paginas = generate_page_list()
+        return render_template('cardapio.html', pages=minhas_paginas)
+
+@app.route('/cardapio/nova', methods=['POST', 'GET'])
+def nova_cardapio():
+    minhas_paginas = generate_page_list()
+    mensagem = None
+    if request.method == 'POST':
+        mensagem = 'Formulário recebido, mas os cardápios ainda não são salvos.' 
+    return render_template('cad_cardapio.html', pages=minhas_paginas, mensagem=mensagem)
 
 @app.route('/eventos', methods=['GET'])
 def eventos():
-    return "<h1>Eventos</h1>"
+    minhas_paginas = generate_page_list()
+    return render_template('agenda.html', pages=minhas_paginas)
+
+@app.route('/eventos/novo', methods=['POST', 'GET'])
+def novo_evento():
+    minhas_paginas = generate_page_list()
+    mensagem = None
+    if request.method == 'POST':
+        mensagem = 'Formulário recebido, mas os eventos ainda não são salvos.' 
+    return render_template('cad_eventos.html', pages=minhas_paginas, mensagem=mensagem)
 
 @app.route('/confirmacoes', methods=['GET'])
 def confirmacao():

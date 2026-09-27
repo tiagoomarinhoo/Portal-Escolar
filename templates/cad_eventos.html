@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% import "macro.html" as macros %}
+    <link rel="stylesheet" href="/static/css/normalize.css">
+
+    <style>
+        .main-container {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-rows: auto
+            1fr;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+            margin: 0;
+            padding: 20px 30px 24px 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #17324d;
+        }
+         .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            grid-auto-rows: auto;
+            grid-gap: 40px;
+            border: #17324d solid 1px;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        .form-group7{
+
+            grid-column: 1 / 4;
+        }
+
+        .form-grid input[type="text"],
+        .form-grid input[type="date"],
+        .form-grid input[type="time"],
+        .form-grid select,
+        .form-grid textarea {
+
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #69788c;
+            border-radius: 10px;
+        }
+        .form-grid textarea{
+            height: 150px;
+        }
+
+        .form-grid label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+         .form-group8 {
+
+            display: flex;
+            justify-content: flex-start;
+            gap: 40px;
+        }
+
+        .form-group8 button {
+            padding: 1px 35px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .form-group8 button[type="reset"] {
+            background-color: white;
+            color: #17324d;
+            border: 1px solid #69788c;
+        }
+
+    </style>
+</head>
+<body class="flex min-h-screen bg-white text-gray-800">
+    {{ macros.build_site_navigation(pages=pages, selected="Eventos") }}
+    
+<main class="main-container">
+    <header class="header">
+        {% if mensagem %}
+        <p role="status">{{ mensagem }}</p>
+        {% endif %}
+        <h1>Novo Evento</h1>
+        <p>10123216</p>
+        
+    </header>
+
+    <form class="form-grid" method="POST" action="/eventos/novo">
+        <div class="form-group1">
+            <label for="titulo">Título</label>
+            <input type="text" id="titulo" name="titulo" required>
+        </div>
+        <div class="form-group2">
+            <label for="data">Data</label>
+            <input type="date" id="data" name="data" required>
+        </div>
+        <div class="form-group3">
+            <label for="horario">Horário</label>
+            <input type="time" id="horario" name="horario" required>
+        </div>
+        <div class="form-group4">
+            <label for="local">Local</label>
+            <input type="text" id="local" name="local" required>
+        </div>
+        <div class="form-group5">
+            <label for="tipo">Tipo</label>
+            <input type="text" id="tipo" name="tipo" required>
+        </div>
+        <div class="form-group6">
+            <label for="acesso">Acesso</label>
+            <input type="text" id="acesso" name="acesso" required>
+        </div>
+        <div class="form-group7">
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" name="descricao" required></textarea>
+        </div>
+        <div class="form-group8">
+        <button type="submit">SALVAR</button>
+        <button type="reset">CANCELAR</button>
+        </div>
+    </form>
+</main>
+
+
+</main>
+</body>
+</html>

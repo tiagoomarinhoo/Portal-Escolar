@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% import "macro.html" as macros %}
+    <link rel="stylesheet" href="/static/css/normalize.css">
+
+    <style>
+        .main-container {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-rows: auto 1fr;
+            gap: 20px;
+            flex: 1;
+            min-width: 0;
+            margin: 0;
+            padding: 40px 30px 24px 0;
+        }
+         .header h1{
+            font-size: 24px;
+            font-weight: bold;
+            color: #17324d;
+        }
+
+        .section-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-auto-rows: auto;
+            grid-gap: 40px;
+
+        }
+
+
+
+        .section-form input[type="text"],
+        .section-form input[type="date"],
+        .section-form select,
+        .section-form textarea {
+
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #69788c;
+            border-radius: 4px;
+        }
+
+        .section-form textarea {
+
+            resize: none;
+            width: 100%;
+            margin: 0;
+            height: 150px;
+            padding: 8px;
+        }
+
+        .form-group1 {
+            grid-column: 1 / 4;
+
+        }
+
+        .form-group2 {
+
+            grid-column: 1 / 4;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 40px;
+
+        }
+
+        .form-group3 {
+            grid-column: 1 / 4;
+            /* grid-row: 2 / 3;     */
+        }
+
+        .form-group4 {
+            grid-column: 1 / 4;
+
+
+
+        }
+
+        .section-form label {
+            font-weight: bold;
+        }
+
+        .section-form button {
+            padding: 8px 35px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .section-form button[type="reset"] {
+            background-color: white;
+            color: #17324d;
+            border: 1px solid #69788c;
+        }
+
+        .section-form button:hover {
+            opacity: 0.9;
+        }
+
+        .section-form button[type="reset"]:hover {
+            opacity: 0.9;
+        }
+
+        .section-form input[type="file"] {
+
+            padding: 5px;
+            border: 1px solid #69788c;
+            border-radius: 4px;
+            color: transparent;
+        }
+
+        .section-form input[type="file"]::file-selector-button {
+
+            color: gray;
+            border: none;
+            font-size: 14px;
+            color: #333333;
+            cursor: pointer;
+            user-select: none;
+
+
+        }
+
+
+
+        .caixa-upload {
+            position: relative;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            padding: 16px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+        }
+
+        .acoes-upload {
+            position: absolute;
+            bottom: 0;
+            right: 40px;
+            display: flex;
+            gap: 8px;
+            /* padding: 0 6px; */
+            background-color: #ffffff;
+            transform: translateY(50%);
+        }
+
+        .acoes-upload1 {
+            position: absolute;
+            bottom: 0;
+            right: 190px;
+            display: flex;
+            gap: 8px;
+            /* padding: 0 6px; */
+            background-color: #ffffff;
+            transform: translateY(50%);
+        }
+
+        .acoes-upload button {
+            padding: 6px 30px;
+            font-size: 14px;
+        }
+
+        /* Esconde o input padrão do navegador */
+        .input-escondido {
+            display: none;
+        }
+
+        /* Estilo do texto "Selecionar arquivo" */
+        .botao-texto {
+            font-size: 14px;
+            color: #333333;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Efeito sutil ao passar o mouse sobre o texto */
+        .botao-texto:hover {
+            color: #000000;
+        }
+    </style>
+
+</head>
+
+<body class="flex min-h-screen bg-white text-gray-800">
+    {{ macros.build_site_navigation(pages=pages, selected="Notícias") }}
+
+    <main class="main-container">
+        <header class="header">
+            <h1>Nova Notícia</h1>
+            {% if mensagem %}
+            <p role="status">{{ mensagem }}</p>
+            {% endif %}
+        </header>
+        <section>
+            <form action="/noticias/nova" class="section-form" method="post" enctype="multipart/form-data">
+
+                <div class="form-group1">
+                    <label for="titulo">Título</label>
+                    <input type="text" id="titulo" name="titulo" placeholder="Digite o título da notícia">
+                </div>
+
+                <div class="form-group2">
+                    <div class="group2-1">
+                        <label for="categoria">Categoria</label>
+                        <select id="categoria" name="categoria">
+                            <option value="geral">Geral</option>
+                            <option value="aviso">Aviso Urgente</option>
+                            <option value="conquista">Conquista</option>
+                        </select>
+                    </div>
+                    <div class="group2-2">
+                        <label for="data_publicacao">Data de publicação</label>
+                        <input type="date" id="data_publicacao" name="data_publicacao" value="2026-05-10">
+                    </div>
+                </div>
+
+                <div class="form-group3">
+                    <label for="conteudo">Conteúdo</label>
+                    <textarea id="conteudo" name="conteudo" placeholder="Digite o conteúdo da notícia"></textarea>
+                </div>
+
+                <div class="form-group4">
+
+                    <label for="imagem">Imagem (opcional)</label>
+                    <!-- <input type="file" id="imagem" name="imagem"> -->
+
+                    <div class="caixa-upload">
+                        <input type="file" id="imagem-upload" class="input-escondido">
+                        <!-- Texto que funciona como o botão dentro da caixa -->
+                        <label for="imagem-upload" class="botao-texto">Selecionar arquivo</label>
+                        <div>
+                            <button class="acoes-upload1" type="submit">Publicar</button>
+                            <button class="acoes-upload" type="reset">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </section>
+
+    </main>
+</body>
+
+</html>
