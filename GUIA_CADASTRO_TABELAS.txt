@@ -1,0 +1,181 @@
+GUIA PARA ADICIONAR CADASTROS E TABELAS
+Portal Escolar
+
+OBJETIVO
+Este arquivo serve como base para criar novas tabelas e telas de cadastro. O exemplo usa a tabela Noticia, que já existe no projeto.
+
+FLUXO DO CADASTRO PERSONALIZADO
+1. O modelo SQLAlchemy define as colunas da tabela.
+2. O template HTML apresenta o formulário.
+3. A rota Flask recebe os campos enviados e valida os dados.
+4. O SQLAlchemy grava o registro.
+5. A rota da listagem consulta a tabela e envia os registros ao template.
+
+ARQUIVOS IMPORTANTES
+- app/models.py: modelos e colunas do banco.
+- app.py: rotas GET/POST e consultas das páginas.
+- templates/cad_noticia.html: formulário HTML existente de notícia.
+- templates/noticias.html: listagem HTML de notícias.
+- app/__init__.py: criação do app, SQLAlchemy e registro das telas Flask-Admin.
+- config.py: DATABASE_URL e SECRET_KEY vindos do ambiente.
+
+1. CRIAR UM MODELO
+Em app/models.py, cada classe db.Model representa uma tabela. Exemplo equivalente ao modelo atual:
+
+class Noticia(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(160), nullable=False)
+    categoria = db.Column(db.String(30), nullable=False, default="geral")
+    resumo = db.Column(db.String(500), nullable=False)
+    imagem = db.Column(db.String(255), nullable=True)
+    destaque = db.Column(db.Boolean, nullable=False, default=False)
+    status = db.Column(db.String(20), nullable=False, default="publicado")
+    data_publicacao = db.Column(db.Date, nullable=False, default=date.today)
+    conteudo = db.Column(db.Text, nullable=False)
+
+As tabelas `NOTICIA_PRAZOS` e `NOTICIA_ANEXOS` usam `noticia_id` como chave
+estrangeira para `noticia.id`. Prazos guardam título e data; anexos guardam o
+nome original e o caminho relativo do arquivo em `static/uploads/noticias/`.
+
+Para uma nova tabela, crie outra classe e escolha os tipos conforme os dados:
+- db.Integer: números inteiros e chaves primárias.
+- db.String(120): texto curto; indique o tamanho máximo.
+- db.Text: texto longo.
+- db.Date: data sem horário.
+- db.DateTime: data e horário.
+- nullable=False: campo obrigatório no banco.
+- default=...: valor usado quando nenhum valor é informado.
+
+Exemplo de novo modelo:
+
+class Evento(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(160), nullable=False)
+    data_evento = db.Column(db.Date, nullable=False)
+    descricao = db.Column(db.Text, nullable=True)
+
+Inclua os imports necessários no início de app/models.py. Se usar date.today, importe `from datetime import date`.
+
+2. ESCOLHER COMO GERAR A TELA DE CADASTRO
+
+--------------------------- OPÇÃO A - FLASK-ADMIN ------------------------------------
+
+Use quando uma tela padrão de backoffice for suficiente. O Flask-Admin gera listagem, criação, edição e exclusão a partir do modelo, sem um template ou rota CRUD próprios.
+
+Em app/__init__.py, importe o modelo novo e registre uma ModelView:
+
+from app.models import Item, Noticia, Evento
+
+admin.add_view(ModelView(Evento, db.session, name="Eventos"))
+
+A tela ficará no painel em `/admin/`. Para adicionar várias tabelas simples, repita a linha de registro ou use uma lista e um loop. Para busca, filtros, rótulos ou opções de seleção específicos, crie uma classe ModelView personalizada, como NoticiaAdmin.
+
+------------------- OPÇÃO B - FORMULÁRIO HTML NO PADRÃO DO SITE ------------------------
+
+
+Use quando a tela precisa manter o visual e o fluxo próprios do Portal Escolar. O exemplo de notícias já segue essa opção.
+
+3. CRIAR O TEMPLATE HTML
+Crie, por exemplo, `templates/cad_evento.html`. Use os nomes dos campos do formulário iguais aos nomes que a rota vai ler. O formulário precisa enviar POST para a rota:
+
+<form action="{{ url_for('novo_evento') }}" method="post">
+    <label for="titulo">Título</label>
+    <input id="titulo" name="titulo" type="text" required>
+
+    <label for="data_evento">Data</label>
+    <input id="data_evento" name="data_evento" type="date" required>
+
+    <label for="descricao">Descrição</label>
+    <textarea id="descricao" name="descricao"></textarea>
+
+    <button type="submit">Salvar</button>
+</form>
+
+Mantenha o macro de navegação, classes CSS e estrutura visual desejados pelo projeto. Um campo HTML só é enviado quando tem atributo `name`. Use `required` no navegador, mas também valide os dados na rota do servidor.
+
+4. CRIAR A ROTA GET/POST
+Em app.py, importe o modelo novo:
+
+from app.models import Noticia, Evento
+
+A rota GET mostra o formulário; a rota POST valida e grava os dados. Exemplo simplificado:
+
+@app.route('/eventos/novo', methods=['GET', 'POST'])
+def novo_evento():
+    paginas = generate_page_list()
+
+    if request.method == 'POST':
+        titulo = request.form.get('titulo', '').strip()
+        data_texto = request.form.get('data_evento', '').strip()
+        descricao = request.form.get('descricao', '').strip()
+
+        try:
+            data_evento = date.fromisoformat(data_texto)
+        except ValueError:
+            data_evento = None
+
+        if not titulo or data_evento is None:
+            return render_template(
+                'cad_evento.html',
+                pages=paginas,
+                mensagem='Preencha o título e uma data válida.',
+            )
+
+        evento = Evento(
+            titulo=titulo,
+            data_evento=data_evento,
+            descricao=descricao or None,
+        )
+        db.session.add(evento)
+        db.session.commit()
+        return redirect(url_for('eventos'))
+
+    return render_template('cad_evento.html', pages=paginas)
+
+Converta valores recebidos pelo formulário para os tipos Python corretos. Por exemplo, `input type="date"` envia texto no formato AAAA-MM-DD, então converta para `date` antes de gravar numa coluna db.Date.
+
+5. MOSTRAR REGISTROS NA PÁGINA
+A rota da listagem consulta a tabela e passa os objetos para o template:
+
+@app.route('/eventos')
+def eventos():
+    paginas = generate_page_list()
+    registros = Evento.query.order_by(Evento.data_evento.desc()).all()
+    return render_template(
+        'agenda.html',
+        pages=paginas,
+        eventos=registros,
+    )
+
+No template, percorra os registros:
+
+{% for evento in eventos %}
+    <article>
+        <h2>{{ evento.titulo }}</h2>
+        <p>{{ evento.data_evento.strftime('%d/%m/%Y') }}</p>
+        <p>{{ evento.descricao or '' }}</p>
+    </article>
+{% else %}
+    <p>Nenhum evento cadastrado.</p>
+{% endfor %}
+
+6. CRIAR A TABELA E TESTAR
+O app.py atual executa `db.create_all()` ao ser iniciado diretamente. Isso cria tabelas que ainda não existem, mas não atualiza tabelas existentes quando você muda colunas. Reinicie o app depois de adicionar um modelo:
+
+1. Defina DATABASE_URL e SECRET_KEY no PowerShell, usando seus próprios valores:
+   $env:DATABASE_URL = "mysql+pymysql://USUARIO:SENHA@localhost:3306/NOME_DO_BANCO?charset=utf8mb4"
+   $env:SECRET_KEY = "uma-chave-secreta-longa"
+2. Inicie o projeto:
+   .\.venv\Scripts\python.exe app.py
+3. Abra a página do formulário, faça um cadastro e confira a listagem.
+
+As variáveis definidas com `$env:` valem somente para aquela janela do PowerShell. Não coloque usuário, senha ou chave secreta neste arquivo de guia, em templates ou no código versionado.
+
+Para mudanças futuras na estrutura de tabelas existentes, use migrações com Flask-Migrate/Alembic. Não dependa de `db.create_all()` para alterar tabelas já criadas.
+
+OBSERVAÇÕES DO EXEMPLO ATUAL
+- O formulário de notícias salva título, resumo, categoria, imagem, destaque, status, data de publicação, conteúdo, prazos e anexos.
+- Imagens aceitam JPG/PNG até 5 MB; anexos aceitam PDF, DOC/DOCX, XLS/XLSX, JPG/PNG até 10 MB por arquivo.
+- `db.create_all()` cria as tabelas novas, mas não altera a tabela de notícias já existente. Confirme/aplique uma migração para incluir as novas colunas de `Noticia` antes de usar o formulário.
+- O Flask-Admin não protege automaticamente `/admin`. Antes de publicar o painel, implemente autenticação e controle de acesso.
+- Use mensagens de validação no servidor; a validação HTML do navegador não substitui a validação da rota.

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ noticia.titulo }} | Portal Escolar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% import "macro.html" as macros %}
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <style>
+        .main-container { flex: 1; min-width: 0; max-width: 1100px; padding: 36px 32px 48px 0; }
+        .back-link { display: inline-block; margin-bottom: 22px; color: #175cd3; text-decoration: none; }
+        .article { color: #17324d; }
+        .article-header { padding-bottom: 22px; border-bottom: 1px solid #dbe5f0; }
+        .article-header h1 { margin: 10px 0; font-size: 32px; line-height: 1.2; }
+        .article-meta { color: #64748b; }
+        .article-image { display: block; width: 100%; max-height: 480px; margin: 24px 0; object-fit: cover; border-radius: 8px; }
+        .article-summary { margin: 22px 0; font-size: 18px; font-weight: 600; line-height: 1.6; }
+        .article-content { white-space: pre-wrap; line-height: 1.8; }
+        .related-section { margin-top: 32px; padding-top: 22px; border-top: 1px solid #dbe5f0; }
+        .related-section h2 { margin-bottom: 12px; font-size: 20px; }
+        .deadline-list, .attachment-list { padding-left: 20px; }
+        .attachment-list a { color: #175cd3; }
+        @media (max-width: 760px) {
+            .main-container { padding: 24px 16px; }
+            .article-header h1 { font-size: 26px; }
+        }
+    </style>
+</head>
+<body class="flex min-h-screen bg-white text-gray-800">
+    {{ macros.build_site_navigation(pages=pages, selected="Notícias") }}
+    <main class="main-container">
+        <a class="back-link" href="{{ url_for('noticias') }}">&larr; Voltar para notícias</a>
+        <article class="article">
+            <header class="article-header">
+                <p>{{ noticia.categoria|title }}{% if noticia.destaque %} · Destaque{% endif %}</p>
+                <h1>{{ noticia.titulo }}</h1>
+                <p class="article-meta">Publicado em {{ noticia.data_publicacao.strftime('%d/%m/%Y') }} · Status: {{ noticia.status|title }}</p>
+            </header>
+            {% if noticia.imagem %}
+            <img class="article-image" src="{{ url_for('static', filename=noticia.imagem) }}" alt="Imagem principal: {{ noticia.titulo }}">
+            {% endif %}
+            <p class="article-summary">{{ noticia.resumo }}</p>
+            <div class="article-content">{{ noticia.conteudo }}</div>
+
+            {% if noticia.imagem_url %}
+            <section class="related-section">
+                <h2>Imagem</h2>
+                <img class="article-image" src="{{ url_for('static', filename=noticia.imagem_url) }}" alt="{{ noticia.imagem_alt or noticia.titulo }}">
+            </section>
+            {% endif %}
+        </article>
+    </main>
+</body>
+</html>

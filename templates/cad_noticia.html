@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Nova notícia | Portal Escolar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     {% import "macro.html" as macros %}
     <link rel="stylesheet" href="/static/css/normalize.css">
@@ -185,6 +185,44 @@
         .botao-texto:hover {
             color: #000000;
         }
+
+        .section-form {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 20px;
+            max-width: 1100px;
+        }
+
+        .section-form label { display: block; margin-bottom: 6px; color: #17324d; }
+        .section-form input[type="text"], .section-form input[type="date"],
+        .section-form select, .section-form textarea {
+            box-sizing: border-box;
+            border: 1px solid #cbd8e8;
+            border-radius: 6px;
+            background: #fff;
+            color: #17324d;
+        }
+        .section-form textarea { resize: vertical; }
+        .section-form button { padding: 9px 16px; }
+        .section-form .form-group1, .section-form .form-group3,
+        .section-form .form-group4, .section-form .form-group5,
+        .section-form .form-group6, .form-actions { grid-column: 1 / -1; }
+        .section-form .form-group2 { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+        .section-form .form-group4 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+        .field-full { grid-column: 1 / -1; }
+        .upload-box, .optional-panel { padding: 16px; border: 1px solid #d8e5f4; border-radius: 8px; background: #f5f9ff; }
+        .upload-box input[type="file"] { width: 100%; max-width: 100%; color: #475569; }
+        .optional-panel { min-height: 115px; }
+        .deadline-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 8px; margin: 8px 0; }
+        .deadline-row button { padding: 6px 10px; background: #e2e8f0; color: #17324d; }
+        .form-actions { display: flex; justify-content: flex-end; gap: 10px; }
+        .form-actions .cancel { background: white; color: #17324d; border: 1px solid #cbd8e8; }
+        .error-message { grid-column: 1 / -1; padding: 10px; border-radius: 6px; color: #991b1b; background: #fee2e2; }
+
+        @media (max-width: 760px) {
+            .section-form, .section-form .form-group2, .section-form .form-group4 { grid-template-columns: 1fr; }
+            .deadline-row { grid-template-columns: 1fr; }
+        }
     </style>
 
 </head>
@@ -194,59 +232,93 @@
 
     <main class="main-container">
         <header class="header">
-            <h1>Nova Notícia</h1>
-            {% if mensagem %}
-            <p role="status">{{ mensagem }}</p>
-            {% endif %}
+            <h1>Nova notícia</h1>
+            <a href="{{ url_for('noticias') }}">Voltar para notícias</a>
         </header>
-        <section>
-            <form action="/noticias/nova" class="section-form" method="post" enctype="multipart/form-data">
+        <form action="{{ url_for('nova_noticia') }}" class="section-form" method="post" enctype="multipart/form-data">
+            {% if mensagem %}<p class="error-message" role="alert">{{ mensagem }}</p>{% endif %}
 
-                <div class="form-group1">
-                    <label for="titulo">Título</label>
-                    <input type="text" id="titulo" name="titulo" placeholder="Digite o título da notícia">
+            <div class="form-group1">
+                <label for="titulo">Título *</label>
+                <input type="text" id="titulo" name="titulo" maxlength="160" placeholder="Digite o título da notícia" value="{{ form_data.get('titulo', '') }}" required>
+            </div>
+            <div class="form-group1">
+                <label for="resumo">Resumo *</label>
+                <textarea id="resumo" name="resumo" maxlength="500" placeholder="Digite um breve resumo da notícia" required>{{ form_data.get('resumo', '') }}</textarea>
+            </div>
+            <div class="form-group2">
+                <div>
+                    <label for="categoria">Categoria *</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="">Selecione a categoria</option>
+                        <option value="geral" {% if form_data.get('categoria', 'geral') == 'geral' %}selected{% endif %}>Geral</option>
+                        <option value="aviso" {% if form_data.get('categoria') == 'aviso' %}selected{% endif %}>Aviso urgente</option>
+                        <option value="conquista" {% if form_data.get('categoria') == 'conquista' %}selected{% endif %}>Conquista</option>
+                    </select>
                 </div>
-
-                <div class="form-group2">
-                    <div class="group2-1">
-                        <label for="categoria">Categoria</label>
-                        <select id="categoria" name="categoria">
-                            <option value="geral">Geral</option>
-                            <option value="aviso">Aviso Urgente</option>
-                            <option value="conquista">Conquista</option>
-                        </select>
-                    </div>
-                    <div class="group2-2">
-                        <label for="data_publicacao">Data de publicação</label>
-                        <input type="date" id="data_publicacao" name="data_publicacao" value="2026-05-10">
-                    </div>
+                <div>
+                    <label for="imagem">Imagem principal</label>
+                    <input type="file" id="imagem" name="imagem" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+                    <small>Formatos aceitos: JPG e PNG. Tamanho máximo: 5 MB.</small>
+                    <img id="imagem-preview" alt="Pré-visualização da imagem" hidden style="display:none;max-width:100%;max-height:180px;margin-top:10px;border-radius:6px">
                 </div>
-
-                <div class="form-group3">
-                    <label for="conteudo">Conteúdo</label>
-                    <textarea id="conteudo" name="conteudo" placeholder="Digite o conteúdo da notícia"></textarea>
+            </div>
+            <div class="form-group4">
+                <div>
+                    <label for="destaque">Destaque</label>
+                    <label style="font-weight:normal"><input type="checkbox" id="destaque" name="destaque" {% if form_data.get('destaque') %}checked{% endif %}> Exibir como notícia em destaque</label>
                 </div>
-
-                <div class="form-group4">
-
-                    <label for="imagem">Imagem (opcional)</label>
-                    <!-- <input type="file" id="imagem" name="imagem"> -->
-
-                    <div class="caixa-upload">
-                        <input type="file" id="imagem-upload" class="input-escondido">
-                        <!-- Texto que funciona como o botão dentro da caixa -->
-                        <label for="imagem-upload" class="botao-texto">Selecionar arquivo</label>
-                        <div>
-                            <button class="acoes-upload1" type="submit">Publicar</button>
-                            <button class="acoes-upload" type="reset">Cancelar</button>
-                        </div>
-                    </div>
+                <div>
+                    <label for="status">Status *</label>
+                    <select id="status" name="status" required>
+                        <option value="publicado" {% if form_data.get('status', 'publicado') == 'publicado' %}selected{% endif %}>Publicado</option>
+                        <option value="rascunho" {% if form_data.get('status') == 'rascunho' %}selected{% endif %}>Rascunho</option>
+                        <option value="agendado" {% if form_data.get('status') == 'agendado' %}selected{% endif %}>Agendado</option>
+                    </select>
                 </div>
-
-            </form>
-        </section>
-
+                <div>
+                    <label for="data_publicacao">Data de publicação *</label>
+                    <input type="date" id="data_publicacao" name="data_publicacao" value="{{ form_data.get('data_publicacao', hoje) }}" required>
+                </div>
+            </div>
+            <div class="form-group3">
+                <label for="conteudo">Conteúdo *</label>
+                <textarea id="conteudo" name="conteudo" placeholder="Digite o conteúdo completo da notícia" required>{{ form_data.get('conteudo', '') }}</textarea>
+            </div>
+            <div class="form-group5 optional-panel">
+                <h3>Prazos importantes <small>(opcional)</small></h3>
+                <div id="prazos-lista"></div>
+                <button type="button" id="adicionar-prazo">+ Adicionar prazo</button>
+            </div>
+            <div class="form-group6 optional-panel">
+                <label for="anexos">Anexos <small>(opcional)</small></label>
+                <input type="file" id="anexos" name="anexos" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png">
+                <small>PDF, DOC, DOCX, XLS, XLSX, JPG ou PNG. Máximo de 10 MB por arquivo.</small>
+            </div>
+            <div class="form-actions">
+                <a class="cancel" href="{{ url_for('noticias') }}">Cancelar</a>
+                <button type="submit">Salvar notícia</button>
+            </div>
+        </form>
     </main>
+    <script>
+        const listaPrazos = document.getElementById('prazos-lista');
+        document.getElementById('adicionar-prazo').addEventListener('click', () => {
+            const linha = document.createElement('div');
+            linha.className = 'deadline-row';
+            linha.innerHTML = '<input type="text" name="prazo_titulo" maxlength="160" placeholder="Nome do prazo" aria-label="Nome do prazo"><input type="date" name="prazo_data" aria-label="Data do prazo"><button type="button" aria-label="Remover prazo">Remover</button>';
+            linha.querySelector('button').addEventListener('click', () => linha.remove());
+            listaPrazos.appendChild(linha);
+        });
+        document.getElementById('imagem').addEventListener('change', (event) => {
+            const preview = document.getElementById('imagem-preview');
+            const arquivo = event.target.files[0];
+            if (!arquivo) { preview.hidden = true; preview.style.display = 'none'; return; }
+            preview.src = URL.createObjectURL(arquivo);
+            preview.hidden = false;
+            preview.style.display = 'block';
+        });
+    </script>
 </body>
 
 </html>

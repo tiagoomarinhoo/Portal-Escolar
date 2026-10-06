@@ -58,14 +58,267 @@
             gap: 10px;
         }
 
-        .filtro-button button {
+        .filtro-button a {
+            display: inline-block;
             background-color: #2563eb;
             color: white;
             padding: 8px 30px;
             border-radius: 15px;
-            text-decoration: none;
             margin-right: 25px;
             text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        .filtro-button a.ativo {
+            background-color: #17324d;
+        }
+
+        .week-range {
+            margin: 0;
+            color: #17324d;
+            font-weight: 600;
+        }
+
+        .week-navigation {
+            display: grid;
+            grid-template-columns: 36px repeat(5, minmax(0, 1fr)) 36px;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .week-nav-arrow,
+        .weekday-tab {
+            display: grid;
+            place-content: center;
+            gap: 4px;
+            min-height: 58px;
+            border: 1px solid #e1eaf5;
+            border-radius: 8px;
+            background-color: #f5f8fc;
+            color: #526987;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .week-nav-arrow {
+            font-size: 24px;
+        }
+
+        .weekday-tab span {
+            font-weight: 600;
+        }
+
+        .weekday-tab.ativo {
+            border-color: #2563eb;
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 12px;
+            overflow-x: auto;
+        }
+
+        .week-day-card {
+            min-width: 0;
+            padding: 10px;
+            border: 1px solid #dce7f3;
+            border-radius: 8px;
+            background-color: white;
+        }
+
+        .week-day-card.selecionado {
+            border-color: #8bb7ff;
+        }
+
+        .week-day-heading {
+            margin-bottom: 10px;
+            color: #17324d;
+        }
+
+        .week-day-heading h2 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .week-day-heading time {
+            color: #69788c;
+            font-size: 13px;
+        }
+
+        .week-meal {
+            margin-top: 8px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .week-meal.almoco {
+            background-color: #effaf7;
+            color: #146b57;
+        }
+
+        .week-meal.jantar {
+            background-color: #f4f1fd;
+            color: #5841a5;
+        }
+
+        .week-meal h3 {
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .week-meal ul {
+            padding-left: 18px;
+            list-style: disc;
+        }
+
+        .week-meal li,
+        .week-meal p {
+            margin: 5px 0;
+            color: #17324d;
+            font-size: 13px;
+        }
+
+        .week-dessert {
+            margin-top: 10px !important;
+            padding: 8px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .week-empty {
+            margin: 0;
+            padding: 12px 4px;
+            color: #69788c;
+            font-size: 13px;
+        }
+
+        .week-allergen-summary {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border: 1px solid #f5d99a;
+            border-radius: 8px;
+            background-color: #fff9eb;
+        }
+
+        .week-allergen-summary h2 {
+            color: #995b0b;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .week-allergen-summary p {
+            color: #69788c;
+            font-size: 13px;
+        }
+
+        .week-allergen-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0;
+        }
+
+        .week-allergen-list li {
+            padding: 8px 14px;
+            border-radius: 20px;
+            background-color: #fff0cc;
+            color: #995b0b;
+            list-style: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 800px) {
+            body.flex {
+                display: block;
+            }
+
+            body.flex > div:first-child {
+                width: 100%;
+                min-height: 0;
+                margin: 0;
+            }
+
+            body.flex > div:first-child > div:first-child {
+                padding: 12px 16px;
+            }
+
+            body.flex > div:first-child > div:first-child h1 {
+                font-size: 18px;
+            }
+
+            body.flex > div:first-child > ul {
+                display: flex;
+                margin: 0;
+                overflow-x: auto;
+            }
+
+            body.flex > div:first-child > ul a {
+                flex: 0 0 auto;
+            }
+
+            body.flex > div:first-child > ul li {
+                padding: 8px 12px;
+                border-left: 0;
+                font-size: 14px;
+            }
+
+            .main-container {
+                width: 100%;
+                padding: 20px 16px;
+            }
+
+            .header {
+                flex-wrap: wrap;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                flex: 1 1 100%;
+                min-width: 0;
+                flex-wrap: wrap;
+            }
+
+            .header-actions input[type="date"] {
+                flex: 1 1 140px;
+                min-width: 0;
+            }
+
+            .header-actions a {
+                margin-right: 0;
+                padding: 8px 16px;
+            }
+
+            .week-navigation,
+            .week-grid {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+            }
+
+            .week-grid {
+                grid-template-columns: repeat(5, minmax(170px, 1fr));
+            }
+
+            .week-navigation {
+                grid-template-columns: 30px repeat(5, minmax(90px, 1fr)) 30px;
+                overflow-x: auto;
+            }
+        }
+
+        .sem-cardapio {
+            margin: 0;
+            padding: 12px 16px;
+            border-left: 3px solid #9ca3af;
+            color: #69788c;
         }
 
         .filtro-dia {
@@ -161,25 +414,26 @@
         }
 
         .alergenos-lista {
-            
+
             display: flex;
             margin-top: 10px;
 
-           
-            
-            
-            
+
+
+
+
 
         }
-        .alergenos-lista li{
+
+        .alergenos-lista li {
             color: #fc5d21;
             font-weight: bold;
-            padding: 10px;           
+            padding: 10px;
             border-radius: 15px;
-          
+
             background-color: #fee8e0;
             list-style-type: none;
-            
+
         }
 
         .alergeno h3 {
@@ -214,6 +468,34 @@
             border-radius: 15px;
 
         }
+
+        .empty-state {
+            padding: 160px 20px;
+            text-align: center;
+            border: 1px dashed #9ca3af;
+            border-radius: 4px;
+            color: #17324d;
+        }
+
+        .empty-state h2 {
+            margin-bottom: 8px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .empty-state p {
+            margin-bottom: 16px;
+            color: #69788c;
+        }
+
+        .empty-state a {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            background-color: #2563eb;
+            color: white;
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -227,18 +509,95 @@
                 <h1>Cardápio</h1>
                 <p>Consulte o cardápio do dia e veja os alimentos e alérgenos.</p>
             </div>
-            <div class="header-actions">
-                <input type="date" value="2026-05-10">
+            <form class="header-actions" method="get" action="{{ url_for('cardapio') }}">
+                <input type="date" id="data" name="data" value="{{ data_selecionada }}" required>
+                <input type="hidden" name="modo" value="{{ modo }}">
                 <a href="/cardapio/nova">Novo Cardápio</a>
-            </div>
+            </form>
         </header>
 
         <section class="filtro-button">
-
-            <button>Por dia</button>
-            <button>Por semana</button>
+            <a href="{{ url_for('cardapio', data=data_selecionada, modo='dia') }}"
+                class="{{ 'ativo' if modo == 'dia' else '' }}"
+                {% if modo == 'dia' %}aria-current="page"{% endif %}>Por dia</a>
+            <a href="{{ url_for('cardapio', data=data_selecionada, modo='semana') }}"
+                class="{{ 'ativo' if modo == 'semana' else '' }}"
+                {% if modo == 'semana' %}aria-current="page"{% endif %}>Por semana</a>
         </section>
 
+        {% if modo == 'semana' %}
+        <p class="week-range">
+            Semana de {{ inicio_semana.strftime('%d/%m/%Y') }} a {{ fim_semana.strftime('%d/%m/%Y') }}
+        </p>
+
+        <nav class="week-navigation" aria-label="Navegação da semana">
+            <a class="week-nav-arrow" href="{{ url_for('cardapio', data=semana_anterior, modo='semana') }}"
+                aria-label="Semana anterior">&larr;</a>
+            {% for dia in dias_exibidos %}
+            <a class="weekday-tab {{ 'ativo' if dia.data.isoformat() == data_selecionada else '' }}"
+                href="{{ url_for('cardapio', data=dia.data.isoformat(), modo='semana') }}">
+                <span>{{ dia.abreviacao }}</span>
+                <time datetime="{{ dia.data.isoformat() }}">{{ dia.data.strftime('%d/%m') }}</time>
+            </a>
+            {% endfor %}
+            <a class="week-nav-arrow" href="{{ url_for('cardapio', data=semana_seguinte, modo='semana') }}"
+                aria-label="Próxima semana">&rarr;</a>
+        </nav>
+
+        <section class="week-grid" aria-label="Cardápio da semana">
+            {% for dia in dias_exibidos %}
+            <article class="week-day-card {{ 'selecionado' if dia.data.isoformat() == data_selecionada else '' }}">
+                <header class="week-day-heading">
+                    <h2>{{ dia.nome }}</h2>
+                    <time datetime="{{ dia.data.isoformat() }}">{{ dia.data.strftime('%d/%m/%Y') }}</time>
+                </header>
+                {% for menu in dia.cardapios %}
+                <section class="week-meal {{ 'almoco' if menu.refeicao == 'Almoço' else 'jantar' }}">
+                    <h3>{{ menu.refeicao }}</h3>
+                    <ul>
+                        {% for item in menu.itens_alimentos %}
+                        <li>{{ item.nome }}</li>
+                        {% else %}
+                        <li>Nenhum alimento cadastrado.</li>
+                        {% endfor %}
+                    </ul>
+                    {% if menu.itens_sobremesas %}
+                    <p class="week-dessert"><strong>Sobremesa:</strong>
+                        {% for item in menu.itens_sobremesas %}
+                        {{ item.nome }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                    {% if menu.alegenos %}
+                    <p><strong>Alérgenos:</strong>
+                        {% for alergeno in menu.alegenos %}
+                        {{ alergeno.nome }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </section>
+                {% else %}
+                <p class="week-empty">Nenhum cardápio cadastrado.</p>
+                {% endfor %}
+            </article>
+            {% endfor %}
+        </section>
+
+        {% if alergenos_semana %}
+        <aside class="week-allergen-summary">
+            <div>
+                <h2>Alérgenos presentes na semana</h2>
+                <p>Confira os alérgenos indicados em cada refeição.</p>
+            </div>
+            <ul class="week-allergen-list">
+                {% for alergeno in alergenos_semana %}
+                <li>{{ alergeno }}</li>
+                {% endfor %}
+            </ul>
+        </aside>
+        {% endif %}
+        {% else %}
+        {% for dia in dias_exibidos %}
         <section class="filtro-dia">
             <span class="icone-refeicao" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -250,98 +609,63 @@
 
             </span>
             <div>
-                <h2>Segunda-feira</h2>
-                <p>10 de maio de 2026</p>
+                <h2>{{ dia.nome }}</h2>
+                <p>{{ dia.data.strftime('%d/%m/%Y') }}</p>
             </div>
         </section>
 
-
+        {% for menu in dia.cardapios %}
         <section class="filtro-almoco">
-
             <div class="cards receicao-identificacao">
-                <span class="icone-refeicao" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-                    </svg>
-
-                </span>
-                <div>
-                    <h2>Almoço</h2>
-                    <p>12:00</p>
-                </div>
+                <h2>{{ menu.refeicao }}</h2>
             </div>
             <div class="cards">
-                <h3>Cardápio</h3>
+                <h3>Alimentos</h3>
                 <ul>
-                    <li>Arroz branco</li>
-                    <li>Feijão carioca</li>
-                    <li>Frango grelhado</li>
-                    <li>Salada de alface e tomate</li>
-                    
+                    {% for item in menu.itens_alimentos %}
+                    <li>{{ item.nome }}</li>
+                    {% else %}
+                    <li>Nenhum alimento cadastrado.</li>
+                    {% endfor %}
                 </ul>
 
-                <p><strong style="color: #2d9b65;">Sobremesa:</strong> Laranja</p>
+                {% if menu.itens_sobremesas %}
+                <h3>Sobremesas</h3>
+                <ul>
+                    {% for item in menu.itens_sobremesas %}
+                    <li>{{ item.nome }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% if menu.observacoes %}
+                <p>{{ menu.observacoes }}</p>
+                {% endif %}
             </div>
             <div class="cards">
-                <div class="alergeno">
-                    <span class="icone-alergeno">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                        </svg>
-
-                    </span>
-                    <h3>Alérgenos presentes</h3>
-                </div>
+                <h3>Alérgenos presentes</h3>
                 <ul class="alergenos-lista">
-                    <li>Glúten</li>
-                    <li>Leite/Lactose</li>
+                    {% for alergeno in menu.alegenos %}
+                    <li>{{ alergeno.nome }}</li>
+                    {% else %}
+                    <li>Nenhum alérgeno presente.</li>
+                    {% endfor %}
                 </ul>
             </div>
         </section>
-
-        <section class="filtro-jantar">
-            <div class="cards receicao-identificacao">
-                <span class="icone-refeicao" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
-                    </svg>
-                </span>
-                <div>
-                    <h2>Jantar</h2>
-                    <p>19:00</p>
-                </div>
-            </div>
-            <div class="cards">
-                <h3>Cardápio</h3>
-                <ul>
-                    <li>Sopa de legumes</li>
-                    <li>Pão integral</li>
-                </ul>
-            </div>
-            <div class="cards">
-                <div class="alergeno">
-                    <span class="icone-alergeno">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                        </svg>
-
-                    </span>
-                    <h3>Alérgenos presentes</h3>
-                </div>
-                <ul class="alergenos-lista">
-                    <li>Glúten</li>
-                    
-                </ul>
-            </div>
+        {% else %}
+        {% if modo == 'semana' %}
+        <p class="sem-cardapio">Nenhum cardápio cadastrado neste dia.</p>
+        {% else %}
+        <section class="empty-state" role="status">
+            <h2>Nenhum cardápio para este dia</h2>
+            <p>Não há refeições cadastradas para {{ data_formatada }}.</p>
+            <a href="{{ url_for('nova_cardapio') }}">Cadastrar cardápio</a>
         </section>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% endif %}
 
         <article class="informacoes">
 
@@ -356,6 +680,12 @@
         </article>
 
     </main>
+
+    <script>
+        document.getElementById('data').addEventListener('change', (event) => {
+            event.currentTarget.form.requestSubmit();
+        });
+    </script>
 
 </body>
 

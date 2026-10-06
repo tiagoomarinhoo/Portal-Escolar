@@ -1,2 +1,27 @@
-Ativar o servidor virtual
+Ativar o servidor virtual no codespace do github
+
 source .venv/bin/activate
+
+
+passo a passo
+python3 -m venv venv
+
+ativar ambiente Linux MacOs
+source ./venv/bin/activate
+
+ativar ambiente Windows
+myenv\Scripts\activate
+
+instalar dependências
+pip3 install -r requirements.txt
+
+rodar
+python3 run.py
+
+
+
+--------------------------------------Executar o sistema ------------------------------
+$env:SECRET_KEY = "dev-secret-key"
+$env:DATABASE_URL = "mysql+pymysql://root:183426@localhost:3306/portal"
+
+python app.py

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Notícias | Portal Escolar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     {% import "macro.html" as macros %}
@@ -145,7 +145,7 @@
     <main class="main-container">
         <header class="header">
             <h1>Notícias</h1>
-            <a href="/noticias/nova" >Nova notícia</a>
+            <a href="{{ url_for('nova_noticia') }}">Nova notícia</a>
         </header>
 
         <section class="filtro-section">
@@ -162,54 +162,19 @@
         </section>
 
         <section class="noticias-section">
-            <div class="cards-noticia">
+            {% for noticia in noticias %}
+            <a class="cards-noticia" href="{{ url_for('detalhe_noticia', noticia_id=noticia.id) }}" style="display:block;color:inherit;text-decoration:none">
                 <div class="card-cabecalho">
                     <div>
-                        <h4>Título da notícia</h4>
-                        <p>Aviso urgente • 10/05/2026</p>
+                        <h4>{{ noticia.titulo }}</h4>
+                        <p>{{ noticia.categoria|title }} • {{ noticia.data_publicacao.strftime('%d/%m/%Y') }}{% if noticia.destaque %} • Destaque{% endif %}</p>
+                        <p>{{ noticia.resumo }}</p>
                     </div>
-                    <nav class="card-acoes" aria-label="Ações da notícia">
-                        <a href="#" aria-label="Editar notícia" title="Editar notícia"><i data-lucide="pencil"></i></a>
-                        <a class="acao-excluir" href="#" aria-label="Excluir notícia" title="Excluir notícia"><i data-lucide="trash-2"></i></a>
-                    </nav>
                 </div>
-            </div>
-            <div class="cards-noticia">
-                <div class="card-cabecalho">
-                    <div>
-                        <h4>Título da notícia</h4>
-                        <p>Geral • 10/05/2026</p>
-                    </div>
-                    <nav class="card-acoes" aria-label="Ações da notícia">
-                        <a href="#" aria-label="Editar notícia" title="Editar notícia"><i data-lucide="pencil"></i></a>
-                        <a class="acao-excluir" href="#" aria-label="Excluir notícia" title="Excluir notícia"><i data-lucide="trash-2"></i></a>
-                    </nav>
-                </div>
-            </div>
-            <div class="cards-noticia">
-                <div class="card-cabecalho">
-                    <div>
-                        <h4>Título da notícia</h4>
-                        <p>Geral • 10/05/2026</p>
-                    </div>
-                    <nav class="card-acoes" aria-label="Ações da notícia">
-                        <a href="#" aria-label="Editar notícia" title="Editar notícia"><i data-lucide="pencil"></i></a>
-                        <a class="acao-excluir" href="#" aria-label="Excluir notícia" title="Excluir notícia"><i data-lucide="trash-2"></i></a>
-                    </nav>
-                </div>
-            </div>
-            <div class="cards-noticia">
-                <div class="card-cabecalho">
-                    <div>
-                        <h4>Título da notícia</h4>
-                        <p>Geral • 10/05/2026</p>
-                    </div>
-                    <nav class="card-acoes" aria-label="Ações da notícia">
-                        <a href="#" aria-label="Editar notícia" title="Editar notícia"><i data-lucide="pencil"></i></a>
-                        <a class="acao-excluir" href="#" aria-label="Excluir notícia" title="Excluir notícia"><i data-lucide="trash-2"></i></a>
-                    </nav>
-                </div>
-            </div>
+            </a>
+            {% else %}
+            <p>Nenhuma notícia cadastrada.</p>
+            {% endfor %}
             <nav class="paginacao" aria-label="Paginação das notícias">
                 <ul>
                     <li><a href="" aria-current="page">1</a></li>

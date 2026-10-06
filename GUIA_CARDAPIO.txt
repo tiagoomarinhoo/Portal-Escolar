@@ -1,0 +1,101 @@
+GUIA DO MODULO DE CARDAPIO
+Portal Escolar
+Atualizado em 03/10/2026
+
+OBJETIVO
+Este guia descreve como o cadastro e a consulta de cardapios funcionam no Portal Escolar: modelos, tabelas relacionadas, formulario, validacoes, filtros por dia/semana e cuidados com o banco de dados.
+
+ARQUIVOS DO MODULO
+- app/models.py: modelos Cardapio e tabelas filhas de alimentos, sobremesas e alergenos.
+- app.py: rotas /cardapio e /cardapio/nova; validacao, persistencia e consultas.
+- templates/cad_cardapio.html: formulario de cadastro.
+- templates/cardapio.html: filtro e exibicao diaria/semanal.
+- config.py: DATABASE_URL seleciona o banco usado pelo aplicativo.
+
+1. ESTRUTURA DOS MODELOS
+O cadastro usa uma tabela principal e tres tabelas filhas. Alimentos, sobremesas e alergenos sao linhas relacionadas ao cardapio, em vez de uma lista inteira dentro de uma coluna de texto.
+
+Tabela cardapios (modelo Cardapio):
+- id: chave primaria.
+- data: DATE obrigatoria.
+- refeicao: texto obrigatorio, atualmente Almoco ou Jantar.
+- observacoes: texto opcional.
+- Restricao unica: combinacao de data e refeicao, para nao permitir dois registros da mesma refeicao no mesmo dia.
+
+Tabela cardapio_itens (modelo CardapioAlimentos):
+- id: chave primaria.
+- cardapio_id: chave estrangeira para cardapios.id.
+- nome: alimento.
+- Restricao unica: cardapio_id e nome.
+
+Tabela cardapio_sobremesas (modelo CardapioSobremesa):
+- id: chave primaria.
+- cardapio_id: chave estrangeira para cardapios.id.
+- nome: sobremesa.
+- Restricao unica: cardapio_id e nome.
+
+Tabela cardapio_alergenos (modelo CardapioAlegeno):
+- id: chave primaria.
+- cardapio_id: chave estrangeira para cardapios.id.
+- nome: alergeno selecionado.
+- Restricao unica: cardapio_id e nome.
+
+Os relacionamentos do modelo Cardapio sao itens_alimentos, itens_sobremesas e alegenos. A grafia alegenos/CardapioAlegeno e a que existe no codigo; use-a ao acessar o relacionamento ou instanciar esse modelo.
+
+2. FORMULARIO DE CADASTRO
+A tela de cadastro fica em /cardapio/nova. O formulario envia POST para a rota nova_cardapio e usa estes nomes de campo:
+- data: data da refeicao, enviada pelo input date em AAAA-MM-DD.
+- refeicao: opcao Almoco ou Jantar.
+- alimentos: texto com os alimentos separados por ponto e virgula. Exemplo: Arroz; Feijao; Frango.
+- sobremesa: texto com uma ou mais sobremesas separadas por ponto e virgula.
+- alergenos: checkboxes com o mesmo name; cada checkbox marcado envia um valor.
+- observacoes: texto opcional.
+
+Na rota, alimentos e sobremesas sao divididos por ponto e virgula, os espacos nas extremidades sao removidos e valores vazios sao descartados. Os checkboxes sao lidos com request.form.getlist('alergenos'); quando nenhum e marcado, a lista fica vazia.
+
+3. FLUXO DE GRAVACAO
+A rota nova_cardapio executa estas etapas:
+1. Le os campos do formulario.
+2. Converte data com date.fromisoformat e aceita somente Almoco ou Jantar.
+3. Verifica se ja existe um cardapio para a mesma data e refeicao.
+4. Cria Cardapio e associa os registros de CardapioAlimentos, CardapioSobremesa e CardapioAlegeno.
+5. Salva o conjunto com db.session e redireciona para /cardapio.
+
+A chave unica no banco e importante como protecao adicional contra duplicidade. A validacao da rota mostra uma mensagem se a data/refeicao ja estiver cadastrada.
+
+4. CONSULTA POR DIA E POR SEMANA
+A rota GET /cardapio recebe os parametros data e modo.
+- /cardapio?data=2026-10-21&modo=dia mostra as refeicoes da data escolhida.
+- /cardapio?data=2026-10-21&modo=semana mostra a semana letiva que contem essa data.
+- Se data nao for informada, a rota usa a data atual. Se a data for invalida, volta para hoje.
+
+No modo dia, o resultado contem apenas a data escolhida; tambem pode exibir sabado ou domingo. No modo semana, a rota calcula a segunda-feira da semana e consulta de segunda a sexta. Os links permitem ir para a semana anterior/seguinte ou selecionar um dia sem sair do modo semanal.
+
+O campo date envia o filtro automaticamente quando seu valor muda. Um campo hidden preserva o modo ativo durante esse envio. A rota mantem a data em ISO para o input e fornece data_formatada em DD/MM/AAAA para mensagens.
+
+5. EXIBICAO NO TEMPLATE
+No modo diario, cada refeicao mostra alimentos, sobremesas, alergenos e observacoes.
+
+No modo semanal, templates/cardapio.html apresenta cinco colunas, uma por dia util. Cada coluna pode conter varias refeicoes, com blocos visuais distintos para almoco e jantar. Sobremesas e alergenos aparecem junto da refeicao; abaixo da grade, os alergenos da semana sao agregados sem repeticao. Dias sem cadastro continuam visiveis com uma mensagem.
+
+Quando nao ha resultado no modo diario, a tela mostra a data selecionada no formato brasileiro e um link para cadastrar um cardapio. A navegacao do portal muda para uma faixa horizontal em telas pequenas; a grade semanal tem rolagem horizontal propria para nao alargar a pagina.
+
+6. BANCO DE DADOS E MIGRACOES
+O app.py chama db.create_all() quando executado diretamente. Esse comando cria tabelas ausentes, mas nao altera colunas ou restricoes de tabelas que ja existem. Mudancas em tabelas existentes devem ser feitas com uma migracao controlada, por exemplo com Flask-Migrate/Alembic, depois de conferir o schema e preservar os dados necessarios.
+
+Foi observado o erro MySQL: Field 'alimentos' doesn't have a default value. Isso indica que o schema MySQL usado naquela execucao ainda tem uma coluna alimentos obrigatoria, embora o modelo atual armazene os alimentos na tabela relacionada cardapio_itens. Antes de alterar o banco, confira SHOW CREATE TABLE cardapios e planeje uma migracao que preserve os dados antigos; nao dependa de db.create_all() para remover ou tornar essa coluna opcional. O banco local consultado durante a verificacao era SQLite e nao tinha essa coluna, portanto o schema MySQL precisa ser confirmado no ambiente correspondente.
+
+ATENCAO AO TIPO DA DATA
+Cardapio.data esta declarada como db.Date, mas a rota nova_cardapio atualmente passa datetime.combine(data_cardapio, datetime.min.time()) ao criar o registro. Para manter o valor coerente com o tipo da coluna, o ideal e passar data_cardapio diretamente. Confirme esse ajuste ao testar no MySQL.
+
+7. EXECUCAO E TESTES
+Configure DATABASE_URL e SECRET_KEY no ambiente conforme o banco local ou de desenvolvimento e execute o projeto com:
+
+    $env:DATABASE_URL = "mysql+pymysql://USUARIO:SENHA@localhost:3306/NOME_DO_BANCO?charset=utf8mb4"
+    $env:SECRET_KEY = "uma-chave-secreta-longa"
+    .\.venv\Scripts\python.exe app.py
+
+As variaveis devem ser definidas na mesma janela do PowerShell usada para iniciar o app. Se a senha do MySQL tiver caracteres especiais, codifique-os para URL antes de montar `DATABASE_URL`.
+O filtro e a renderizacao foram verificados com Flask test client e SQLite em memoria, incluindo semana de segunda a sexta, fim de semana no modo diario, estados vazios e exibicao de alimentos, sobremesas e alergenos. A revisao visual foi feita em desktop e celular com registros temporarios. Esses testes nao alteraram o banco permanente.
+
+Antes de considerar o cadastro pronto no MySQL, valide o schema real, aplique a migracao pendente da coluna alimentos e teste um novo cadastro e a consulta semanal usando uma copia de desenvolvimento do banco.

@@ -1,0 +1,20 @@
+30/09/2026
+Fiz a conexão com o banco de dados usando o flask-admin, vi que tem dois modos de usar, preferir usar o meu html do que o padrão do flask admin, ainda preciso estudar pois saiu algumas coisas errado,
+1- ele crio outra tabela ao vez de pegar a tela ja criada
+2- faltou como o arquivo que gostaria de ver na noticia tipo uma imagem
+3- nas telas das noticias precisa mostras elas e tb clicar nelas para vc saber mais sobre como uma pagina de noticia mesmo, pensar em como fazer isso depois.
+
+02/10/2026
+Corrigi a integração do projeto com o banco da tabela noticias. Ajustei o modelo para refletir o schema real do banco (nome da tabela, campos e tipos), removi referências antigas que não existiam no MySQL, e alinhei a listagem e a página de detalhe das notícias com o campo publicado_em e imagem_url. Também revisamos a estrutura do Flask-Admin para que ele leia corretamente os campos atuais da tabela. O ponto principal foi entender que o problema não era na tela HTML, mas no mapeamento do SQLAlchemy com o banco real.
+
+03/10/2026
+Implementei na rota de cardápio os modos de consulta por dia e por semana. O modo semanal usa a data selecionada como referência, consulta de segunda a sexta, agrupa as refeições por dia e permite navegar para a semana anterior ou seguinte. A lista de nomes dos dias também inclui sábado e domingo para que a consulta diária dessas datas não provoque IndexError.
+
+Atualizei templates/cardapio.html para enviar o filtro de data automaticamente ao selecionar uma data, preservar o modo ativo e exibir a data no formato brasileiro na mensagem sem resultados. A visualização semanal foi organizada em cinco colunas, com blocos separados por refeição, alimentos, sobremesas, alérgenos por refeição e resumo semanal de alérgenos sem repetição. Dias sem cardápio continuam visíveis. Em telas pequenas, a navegação do portal fica horizontal e a rolagem da semana permanece dentro da grade.
+
+Corrigi erros de estrutura Jinja no template, incluindo loops duplicados e tags de controle dentro de comentários HTML. Testei as consultas diária e semanal, datas de fim de semana, estados vazios e a renderização visual em desktop e celular. Os testes visuais usaram dados fictícios em SQLite em memória.
+
+Ponto pendente: foi investigado o erro MySQL "Field 'alimentos' doesn't have a default value". Ele indica que a tabela cardapios usada por aquela execução ainda possui uma coluna alimentos obrigatória que não é enviada pelo modelo atual, que armazena os alimentos em tabela relacionada. Não foi aplicada migração no MySQL; é necessário conferir o schema real e migrar ou tornar a coluna antiga opcional/removê-la preservando os dados.
+
+A prévia visual foi iniciada em http://127.0.0.1:5001 com banco temporário em memória; os registros usados nela não são dados permanentes do projeto.
+

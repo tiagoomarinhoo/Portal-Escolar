@@ -63,9 +63,13 @@
         <h2>integrado</h2>
         <p>Acesse sua conta</p>
 
-        <form  action="{{ url_for('processar_login') }}" method="post">
-            <label for="user">E-mail ou usuário</label>
-            <input type="text" name="user">
+        {% if error %}
+        <p role="alert">{{ error }}</p>
+        {% endif %}
+
+        <form  action="{{ url_for('login') }}" method="post">
+            <label for="email">E-mail</label>
+            <input type="email" name="email">
             <label for="senha">Senha</label>
             <input type="password" name="senha">
             <button class="button-ts" type="submit">Entrar</button>
