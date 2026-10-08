@@ -1,0 +1,78 @@
+GUIA DE CADASTRO DE USUARIO
+Atualizado em 07/10/2026
+
+OBJETIVO
+
+Este documento descreve o fluxo de cadastro de usuarios que existe no Portal Escolar, incluindo a rota, as permissoes, os campos, as validacoes e a exibicao da tabela.
+
+ARQUIVOS RELACIONADOS
+
+- app.py: define a rota novo_usuario e processa o formulario.
+- app/models.py: define o modelo Usuario e a tabela usuarios.
+- app/__init__.py: fornece o decorador reutilizavel requer_perfil, que verifica autenticacao e perfil.
+- templates/cad_usuario.html: apresenta o formulario e a tabela de usuarios cadastrados.
+
+ACESSO A TELA
+
+A rota de cadastro e:
+
+    /configuracoes/novo_usuario
+
+Ela aceita GET para exibir a pagina e POST para processar o formulario. O decorador @requer_perfil('admin', 'direcao') permite o acesso somente a usuarios autenticados com perfil admin ou direcao. A comparacao de perfis ignora maiusculas, espacos externos e acentos; por isso, o perfil salvo como "direção" e aceito.
+
+Se a pessoa nao estiver autenticada, o Flask-Login exige o login. Se estiver autenticada, mas nao tiver um perfil permitido, a rota responde com HTTP 403 (acesso proibido).
+
+CAMPOS DO FORMULARIO
+
+- Nome: enviado como nome.
+- E-mail: enviado como email.
+- Senha: enviada como senha.
+- Perfil: enviado como perfil.
+
+Os perfis atualmente oferecidos no formulario e aceitos pela rota sao:
+
+- admin
+- direção
+- professor
+- aluno
+
+O perfil representante ainda nao esta implementado no formulario nem na validacao da rota.
+
+PROCESSAMENTO DO CADASTRO
+
+Ao receber o formulario por POST, a rota:
+
+1. Le os valores dos campos e remove espacos externos de nome, e-mail e perfil.
+2. Verifica se nome, e-mail e senha foram preenchidos e se o perfil pertence a lista permitida.
+3. Consulta a tabela usuarios para impedir o cadastro de outro usuario com o mesmo e-mail.
+4. Gera o hash da senha com werkzeug.security.generate_password_hash.
+5. Cria o usuario com o perfil selecionado e ativo=True.
+6. Salva o registro no banco com SQLAlchemy.
+7. Redireciona de volta para a propria rota, que consulta novamente os usuarios e exibe a lista atualizada.
+
+O login usa check_password_hash para conferir a senha informada com o hash armazenado. A senha original nao e gravada no banco.
+
+MODELO E TABELA
+
+O modelo Usuario esta em app/models.py e representa a tabela usuarios. Os campos relevantes sao:
+
+- id: chave primaria.
+- nome: nome do usuario, obrigatorio.
+- email: e-mail obrigatorio e unico.
+- senha_hash: hash da senha, obrigatorio.
+- perfil: perfil de acesso, obrigatorio.
+- ativo: indica se a conta esta ativa.
+- criado_em: data e hora de criacao.
+
+A propriedade is_active usada pelo Flask-Login le o valor do campo ativo.
+
+LISTAGEM NA PAGINA
+
+A rota consulta os registros com Usuario.query.all() e os envia ao template como usuarios. O template percorre essa lista com um loop Jinja e mostra nome, e-mail e perfil em uma tabela.
+
+PONTOS A CONSIDERAR
+
+- A rota passa uma mensagem de validacao no parametro mensagem, mas o template atual nao mostra essa mensagem. Assim, erros como campos invalidos ou e-mail duplicado podem nao ficar visiveis na tela.
+- A consulta de usuarios ocorre antes do processamento do POST. Em caso de cadastro valido, o redirecionamento faz uma nova requisicao GET e atualiza a lista; se houver erro de validacao, a pagina usa a lista consultada antes do processamento.
+- Nao ha, no formulario atual, campo para representante.
+- A tabela exibe e-mail e perfil para todos os usuarios que conseguem acessar a pagina; o acesso a pagina esta limitado a admin e direcao.

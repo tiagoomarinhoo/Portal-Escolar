@@ -18,3 +18,11 @@ Ponto pendente: foi investigado o erro MySQL "Field 'alimentos' doesn't have a d
 
 A prévia visual foi iniciada em http://127.0.0.1:5001 com banco temporário em memória; os registros usados nela não são dados permanentes do projeto.
 
+07/10/2026
+Atualizei a área de cadastro de usuários. Foi criada a rota /configuracoes/novo_usuario, restrita aos perfis admin e direção. A rota valida os campos obrigatórios, impede o cadastro de e-mails já existentes e limita os perfis aceitos a admin, direção, professor e aluno. As senhas são armazenadas com generate_password_hash, o usuário é criado como ativo e, após o cadastro, a página é carregada novamente.
+
+A tela templates/cad_usuario.html contém o formulário de nome, e-mail, senha e perfil, além da tabela com nome, e-mail e perfil dos usuários cadastrados. A rota envia a lista de usuários ao template e o loop da tabela usa a sintaxe Jinja correta.
+
+Também foi implementada uma verificação reutilizável de perfil para proteger rotas de cadastro e acesso ao Flask-Admin, permitindo admin e direção. A função usuario_tem_perfil foi disponibilizada nos templates para controlar a exibição de links de cadastro conforme o perfil.
+
+Ponto pendente: o perfil representante ainda não está entre as opções do formulário nem entre os perfis aceitos pela validação da rota.

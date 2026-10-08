@@ -4,11 +4,11 @@ import uuid
 from flask import Flask, current_app, render_template, request, url_for, redirect
 import requests
 from flask_sqlalchemy import SQLAlchemy
-from app import app, db
+from app import app, db, requer_perfil
 from app.models import Noticia , Cardapio , CardapioAlimentos, CardapioSobremesa, CardapioAlegeno ,  Usuario
 from flask_admin import Admin
 from werkzeug.utils import secure_filename
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import LoginManager, login_user , logout_user, login_required, current_user , UserMixin
 import hashlib
 
@@ -26,8 +26,11 @@ def hash_password(txt):
 
 @lm.user_loader
 def user_loader(user_id):
-    usuario = db.session.query(Usuario).filter_by(id=user_id).first()
-    return usuario
+    try:
+        usuario_id = int(user_id)
+    except ValueError:
+        return None
+    return db.session.query(Usuario).filter_by(id=usuario_id).first()
 
 
 
@@ -95,6 +98,7 @@ def home():
 # rota para a página de notícias, que exibe a lista de páginas no menu
 
 @app.route('/noticias', methods=['GET'])
+@login_required
 def noticias():
     minhas_paginas = generate_page_list()
     noticias_publicadas = Noticia.query.order_by(
@@ -105,6 +109,7 @@ def noticias():
     )
 
 @app.route('/noticias/<int:noticia_id>')
+@login_required
 def detalhe_noticia(noticia_id):
     noticia = Noticia.query.get_or_404(noticia_id)
     return render_template(
@@ -119,6 +124,7 @@ def tamanho_upload(arquivo):
     return tamanho
 
 @app.route('/noticias/nova', methods=['POST', 'GET'])
+@requer_perfil('admin', 'direção')
 def nova_noticia():
     minhas_paginas = generate_page_list()
     mensagem = None
@@ -193,6 +199,7 @@ def nova_noticia():
     )
 
 @app.route('/cardapio', methods=['GET'])
+@login_required
 def cardapio():
     minhas_paginas = generate_page_list()
     data_texto = request.args.get('data', date.today().isoformat()).strip()
@@ -279,6 +286,7 @@ def cardapio():
         
 
 @app.route('/cardapio/nova', methods=['POST', 'GET'])
+@requer_perfil('admin', 'direção')
 def nova_cardapio():
     minhas_paginas = generate_page_list()
     mensagem = None
@@ -332,11 +340,13 @@ def nova_cardapio():
     return render_template('cad_cardapio.html', pages=minhas_paginas, mensagem=mensagem,)
 
 @app.route('/eventos', methods=['GET'])
+@login_required
 def eventos():
     minhas_paginas = generate_page_list()
     return render_template('agenda.html', pages=minhas_paginas)
 
 @app.route('/eventos/novo', methods=['POST', 'GET'])
+@requer_perfil('admin', 'direção')
 def novo_evento():
     minhas_paginas = generate_page_list()
     mensagem = None
@@ -345,21 +355,53 @@ def novo_evento():
     return render_template('cad_eventos.html', pages=minhas_paginas, mensagem=mensagem)
 
 @app.route('/confirmacoes', methods=['GET'])
+@login_required
 def confirmacao():
     return "<h1>Confirmações</h1>"
 
 @app.route('/configuracoes', methods=['GET'])
+@login_required
 def configuracao():
-    return "<h1>Configurações</h1>"
+    minhas_paginas = generate_page_list()
+    return render_template('configuracao.html', pages=minhas_paginas)
+
+@app.route('/configuracoes/novo_usuario', methods=['POST', 'GET'])
+@requer_perfil('admin', 'direção')
+def novo_usuario():
+    minhas_paginas = generate_page_list()
+    usuarios = Usuario.query.all()
+    mensagem = None
+    if request.method == 'POST':
+        nome = request.form.get('nome', '').strip()
+        email = request.form.get('email', '').strip()
+        senha = request.form.get('senha', '')
+        perfil = request.form.get('perfil', '').strip()
+
+        if not nome or not email or not senha or perfil not in {'admin', 'direção', 'professor', 'aluno'}:
+            mensagem = 'Preencha todos os campos corretamente.'
+        elif Usuario.query.filter_by(email=email).first():
+            mensagem = 'Já existe um usuário com este e-mail.'
+        else:
+            novo_usuario = Usuario(
+                nome=nome,
+                email=email,
+                senha_hash=generate_password_hash(senha),
+                perfil=perfil,
+                ativo=True
+            )
+            db.session.add(novo_usuario)
+            db.session.commit()
+            return redirect(url_for('novo_usuario'))
+    return render_template('cad_usuario.html', pages=minhas_paginas, mensagem=mensagem, usuarios=usuarios)
 
 @app.route('/sair', methods=['GET'])
+@login_required
 def sair():
-    return "<h1>Sair (sair)</h1>"
+    logout_user()
+    return redirect(url_for('login'))
 
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(host='0.0.0.0', port=5000, debug=True)
-
-
 

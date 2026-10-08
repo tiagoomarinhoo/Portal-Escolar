@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    {% import "macro.html" as macros %}
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <style>
+        .botton {
+
+            margin: 20px 200px 20px 0;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #2563eb;
+            color: white;
+
+        }
+    </style>
+</head>
+
+<body class="flex min-h-screen bg-white text-gray-800">
+    {{ macros.build_site_navigation(pages=pages, selected="Notícias") }}
+
+    <div>
+        {% if usuario_tem_perfil("admin", "direção") %}
+        <a class="botton" href="{{ url_for('novo_usuario') }}">Novo Usuário</a>
+        {% endif %}
+    </div>
+</body>
+
+</html>

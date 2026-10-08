@@ -512,7 +512,9 @@
             <form class="header-actions" method="get" action="{{ url_for('cardapio') }}">
                 <input type="date" id="data" name="data" value="{{ data_selecionada }}" required>
                 <input type="hidden" name="modo" value="{{ modo }}">
+                {% if usuario_tem_perfil("admin", "direção") %}
                 <a href="/cardapio/nova">Novo Cardápio</a>
+                {% endif %}
             </form>
         </header>
 

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    {% import "macro.html" as macros %}
+    <link rel="stylesheet" href="/static/css/normalize.css">
+
+
+</head>
+
+<body class="flex min-h-screen bg-white text-gray-800">
+    {{ macros.build_site_navigation(pages=pages, selected="Notícias") }}
+
+    <section class="main-container">
+
+        <form action="{{ url_for('novo_usuario') }}" method="post">
+            <div class="mb-4">
+                <label for="nome" class="block text-gray-700">Nome:</label>
+                <input type="text" id="nome" name="nome" class="border rounded py-2 px-3">
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700">Email:</label>
+                <input type="email" id="email" name="email" class="border rounded py-2 px-3">
+            </div>
+            <div class="mb-4">
+                <label for="senha" class="block text-gray-700">Senha:</label>
+                <input type="password" id="senha" name="senha" class="border rounded py-2 px-3">
+            </div>
+            <div class="mb-4">
+                <label for="perfil" class="block text-gray-700">Perfil:</label>
+                <select id="perfil" name="perfil" class="border rounded py-2 px-3">
+                    <option value="">Selecione um perfil</option>
+                    <option value="admin">Admin</option>
+                    <option value="direção">Direção</option>
+                    <option value="professor">Professor</option>
+                    <option value="aluno">Aluno</option>
+                </select>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Cadastrar</button>
+        </form>
+        <section class="mt-8">
+            <h2 class="text-xl font-bold mb-4">Usuários Cadastrados</h2>
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border-b">Nome</th>
+                        <th class="py-2 px-4 border-b">Email</th>
+                        <th class="py-2 px-4 border-b">Perfil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Adicione aqui os dados dos usuários cadastrados -->
+                    {% for novo_usuario in usuarios %}
+                    <tr>
+                        <td class="py-2 px-4 border-b">{{ novo_usuario.nome }}</td>
+                        <td class="py-2 px-4 border-b">{{ novo_usuario.email }}</td>
+                        <td class="py-2 px-4 border-b">{{ novo_usuario.perfil }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <footer class="bg-gray-800 text-white py-4 mt-auto">
+            <div class="container mx-auto text-center">
+                <p>&copy; 2024 Portal Escolar. Todos os direitos reservados.</p>
+            </div>
+</body>
+
+</html>

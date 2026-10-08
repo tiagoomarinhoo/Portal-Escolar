@@ -102,8 +102,9 @@
         <header class="header">
             <h1>Agenda</h1>
              <div class="header-actions">
-               
+               {% if usuario_tem_perfil("admin", "direção") %}
                 <a href="/eventos/novo">Novo Evento</a>
+                {% endif %}
             </div>
         </header>
         <section class="grid-container">

@@ -25,3 +25,10 @@ $env:SECRET_KEY = "dev-secret-key"
 $env:DATABASE_URL = "mysql+pymysql://root:183426@localhost:3306/portal"
 
 python app.py
+
+
+$env:SECRET_KEY = "dev-secret-key"
+$env:DATABASE_URL='postgresql://neondb_owner:npg_m8rVO7iBqFIS@ep-round-union-b6zadfp8-pooler.c-2.sa-east-1.aws.neon.tech/portal_web?sslmode=require&channel_binding=require'
+
+
+python app.py
