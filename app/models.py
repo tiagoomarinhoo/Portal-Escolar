@@ -123,3 +123,16 @@ class CardapioAlegeno(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     
     cardapio = db.relationship("Cardapio", back_populates="alegenos")
+
+
+class Evento(db.Model):
+    __tablename__ = "evento"
+
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(200), nullable=False)
+    local = db.Column(db.String(50), nullable=False)
+    tipo = db.Column(db.String(50), nullable=False)
+    acesso = db.Column(db.String(50), nullable=False)
+    descricao = db.Column(db.String(500), nullable=False)
+    data = db.Column(db.Date, nullable=True)
+    horario = db.Column(db.Time, nullable=True)

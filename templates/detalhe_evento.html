@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <script src="https://cdn.tailwindcss.com"></script>
+    {% import "macro.html" as macros %}
+    <link rel="stylesheet" href="/static/css/normalize.css">
+</head>
+<body class="flex min-h-screen bg-white text-gray-800">
+    {{ macros.build_site_navigation(pages=pages, selected="Notícias") }}
+
+
+    <main class="main-container">
+        <h1>Feira de Ciências</h1>
+
+        <p>Evento aberto</p>
+
+        <p>22/05/2026 - 09:00</p>
+        <p>Patio de Escola</p>
+
+        <p>Venha Prestigiar os projetos desenvolvidis pelos nossos alunos.</p>
+
+
+
+        <section>
+            <h3>Confirmar presença</h3>
+            <p>Voce ainda não confimou sua presença</p>
+            <form  action="" method="get">
+                <input type="button"    value="Confirmar presença">
+                <a href="#">Ver participantes (23)</a>
+            </form>
+        </section>
+    </main>
+
+    
+</body>
+</html>

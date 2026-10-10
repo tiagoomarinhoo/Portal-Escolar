@@ -5,7 +5,7 @@ from flask import Flask, current_app, render_template, request, url_for, redirec
 import requests
 from flask_sqlalchemy import SQLAlchemy
 from app import app, db, requer_perfil
-from app.models import Noticia , Cardapio , CardapioAlimentos, CardapioSobremesa, CardapioAlegeno ,  Usuario
+from app.models import Noticia, Cardapio, CardapioAlimentos, CardapioSobremesa, CardapioAlegeno, Usuario, Evento
 from flask_admin import Admin
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -350,9 +350,57 @@ def eventos():
 def novo_evento():
     minhas_paginas = generate_page_list()
     mensagem = None
+
     if request.method == 'POST':
-        mensagem = 'Formulário recebido, mas os eventos ainda não são salvos.' 
+        titulo = request.form.get('titulo', '').strip()
+        local = request.form.get('local', '').strip()
+        tipo = request.form.get('tipo', '').strip()
+        acesso = request.form.get('acesso', '').strip()
+        descricao = request.form.get('descricao', '').strip()
+        data_texto = request.form.get('data', '').strip()
+        horario_texto = request.form.get('horario', '').strip()
+
+        try:
+            data_evento = date.fromisoformat(data_texto) if data_texto else None
+        except ValueError:
+            data_evento = None
+
+        try:
+            horario_evento = (
+                datetime.strptime(horario_texto, '%H:%M').time()
+                if horario_texto else None
+            )
+        except ValueError:
+            horario_evento = None
+
+        if not titulo or not local or not descricao or data_evento is None:
+            mensagem = 'Preencha título, local, descrição e uma data válida.'
+        else:
+            evento = Evento(
+                titulo=titulo,
+                local=local,
+                tipo=tipo,
+                acesso=acesso,
+                descricao=descricao,
+                data=data_evento,
+                horario=horario_evento,
+            )
+            db.session.add(evento)
+            db.session.commit()
+            return redirect(url_for('eventos'))
+
     return render_template('cad_eventos.html', pages=minhas_paginas, mensagem=mensagem)
+
+
+@app.route('/eventos/<int:evento_id>')
+@login_required
+def detalhe_evento(evento_id):
+
+    evento = Evento.query.get_or_404(evento_id)
+    return render_template(
+        'detalhe_evento.html', pages=generate_page_list(), evento=evento
+    )
+
 
 @app.route('/confirmacoes', methods=['GET'])
 @login_required

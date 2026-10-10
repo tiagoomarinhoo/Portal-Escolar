@@ -173,6 +173,9 @@ As variáveis definidas com `$env:` valem somente para aquela janela do PowerShe
 
 Para mudanças futuras na estrutura de tabelas existentes, use migrações com Flask-Migrate/Alembic. Não dependa de `db.create_all()` para alterar tabelas já criadas.
 
+MIGRAÇÃO DA TABELA DE EVENTOS
+A tabela `evento` existente pode não ter as colunas `data` e `horario` exigidas pelo modelo. No PostgreSQL, aplique `atualizacoes/20261010_evento_add_data_horario.sql` no mesmo banco indicado por `DATABASE_URL`. A migração adiciona as colunas como opcionais e pode ser executada mais de uma vez sem apagar registros.
+
 OBSERVAÇÕES DO EXEMPLO ATUAL
 - O formulário de notícias salva título, resumo, categoria, imagem, destaque, status, data de publicação, conteúdo, prazos e anexos.
 - Imagens aceitam JPG/PNG até 5 MB; anexos aceitam PDF, DOC/DOCX, XLS/XLSX, JPG/PNG até 10 MB por arquivo.
